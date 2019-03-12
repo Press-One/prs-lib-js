@@ -26,9 +26,9 @@ describe('Finance', function () {
     }
   });
 
-  it('deposit', async function () {
+  it('recharge', async function () {
     try {
-      const res = await client.finance.deposit(1);
+      const res = await client.finance.recharge(1);
       should.exist(res.body);
     } catch (err) {
       assert.fail(JSON.stringify(err.response));
