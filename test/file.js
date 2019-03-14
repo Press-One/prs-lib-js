@@ -52,6 +52,7 @@ describe('File', function () {
     try {
       const res = await client.file.getByMsghash(fileHash);
       res.status.should.equal(200);
+      console.log(res.text);
     } catch (err) {
       assert.fail(JSON.stringify(err.response));
     }
@@ -62,6 +63,16 @@ describe('File', function () {
       const buyClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
       const res = await buyClient.file.reward(fileRId, 1, 'hello');
       res.status.should.equal(200);
+    } catch (err) {
+      assert.fail(JSON.stringify(err.response));
+    }
+  });
+
+  it('get files', async function () {
+    try {
+      const res = await client.file.getFilesByAddress(user.address, {offset: 0, limit: 10});
+      res.status.should.equal(200);
+      console.log(res.text);
     } catch (err) {
       assert.fail(JSON.stringify(err.response));
     }
