@@ -13,15 +13,21 @@ let fileHash = null;
 let fileRId = null;
 
 let markdownFileUrl = null;
+let markdownFileUrl2 = null;
 
 before(function () {
   const markdownFile = `../${String(Date.now())}_file.md`;
   markdownFileUrl = path.join(__dirname, markdownFile);
   fs.writeFileSync(markdownFileUrl, String(Date.now() + 'file'), 'utf-8');
+
+  const markdownFile2 = `../${String(Date.now())}_file2.md`;
+  markdownFileUrl2 = path.join(__dirname, markdownFile2);
+  fs.writeFileSync(markdownFileUrl2, String(Date.now() + 'file2'), 'utf-8');
 });
 
 after(function () {
   fs.unlinkSync(markdownFileUrl)
+  fs.unlinkSync(markdownFileUrl2)
 });
 
 describe('File', function () {
@@ -34,6 +40,19 @@ describe('File', function () {
       res.status.should.equal(200);
       fileHash = res.body.cache.msghash;
       fileRId = res.body.cache.rId;
+    } catch (err) {
+      assert.fail(JSON.stringify(err.response));
+    }
+  });
+
+  it('sign file with meta', async function () {
+    this.timeout(1000 * 200);
+    try {
+      const stream = fs.createReadStream(markdownFileUrl2);
+      let data = { stream: stream, filename: 'text.md', title: 'xxx' };
+      let meta = { uuid: 'xxxxxxx' };
+      const res = await client.file.signByStream(data, meta);
+      res.status.should.equal(200);
     } catch (err) {
       assert.fail(JSON.stringify(err.response));
     }
@@ -52,7 +71,6 @@ describe('File', function () {
     try {
       const res = await client.file.getByMsghash(fileHash);
       res.status.should.equal(200);
-      console.log(res.text);
     } catch (err) {
       assert.fail(JSON.stringify(err.response));
     }
@@ -72,7 +90,6 @@ describe('File', function () {
     try {
       const res = await client.file.getFilesByAddress(user.address, {offset: 0, limit: 10});
       res.status.should.equal(200);
-      console.log(res.text);
     } catch (err) {
       assert.fail(JSON.stringify(err.response));
     }
