@@ -12,6 +12,7 @@ describe('Keystore', function () {
       const keystore = res.body.keystore;
       should.exist(keystore);
     } catch (err) {
+      console.log(err);
       assert.fail(JSON.stringify(err.response));
     }
   });

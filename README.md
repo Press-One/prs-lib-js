@@ -53,3 +53,13 @@ const client = new PRS({ env: 'env', debug: true, address: authAddress, token: t
 - `token`: 授权用户的 access token.
 - `privateKey`: 授权用户的 privateKey.
 
+## 示例代码
+
+```
+const PRS = require('prs-lib');
+
+const client = new PRS({ env: 'env', debug: true });
+const res = client.block.getByRIds(['ba03bd584d69b89615ce8db22b4c593342a5ec09b343a7859044a8e4d389c4c2', '65163724a98d29506b1031dc68fa62fb5a7a11fe631fb723a723b2a19e9bb65c'])
+console.log(res.body);
+```
+
