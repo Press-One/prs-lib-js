@@ -21,7 +21,7 @@ PRS 目前提供了两个环境供开发者使用：
 
 ### 使用步骤
 
-1. 开发者前往 PRS 官网注册账号。(正式环境：https://press.one，测试环境：https://beta.press.one )
+1. 开发者前往 PRS 官网注册账号。(正式环境：https://press.one，测试环境：https://beta.press.one )
 2. 登录成功后进入[开发者设置](https://beta.press.one/developer/settings)、[我的 DApp](https://beta.press.one/developer/apps)，完善开发者信息以及创建 DApp。
 3. 在项目中安装此 [Lib](https://github.com/Press-One/prs-lib-js) .
 4. DApp 在合适的时候引导用户进行授权。
@@ -31,7 +31,7 @@ PRS 目前提供了两个环境供开发者使用：
 
 ### 安装
 
-通过 npm 安装:
+通过 npm 安装:
 
 ```
 npm install prs-lib --save
