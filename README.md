@@ -55,7 +55,7 @@ const client = new PRS({ env: 'env', debug: true, address: authAddress, token: t
 
 ## 示例代码
 
-```
+```javascript
 const PRS = require('prs-lib');
 
 const client = new PRS({ env: 'env', debug: true });
