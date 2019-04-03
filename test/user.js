@@ -18,7 +18,7 @@ describe('User', function () {
       const res = await client.user.getByAddress(user.address);
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -32,7 +32,7 @@ describe('User', function () {
       const res = await client.user.editProfile(profile);
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -42,7 +42,7 @@ describe('User', function () {
       const res = await client.user.uploadAvatar(avatarBase64String);
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 });

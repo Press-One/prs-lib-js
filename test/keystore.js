@@ -14,7 +14,7 @@ describe('Keystore', function () {
       should.exist(keystore);
     } catch (err) {
       console.log(err);
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 });

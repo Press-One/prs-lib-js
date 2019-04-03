@@ -25,7 +25,7 @@ describe('Draft', function () {
       res.status.should.equal(200);
       draftId = res.body.draftId;
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -39,7 +39,7 @@ describe('Draft', function () {
       const res = await client.draft.update(draftId, draft);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -48,7 +48,7 @@ describe('Draft', function () {
       const res = await client.draft.getById(draftId);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -57,7 +57,7 @@ describe('Draft', function () {
       const res = await client.draft.getDrafts();
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -66,7 +66,7 @@ describe('Draft', function () {
       const res = await client.draft.delete(draftId);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 });

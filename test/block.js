@@ -13,7 +13,7 @@ describe('Block', function () {
       ]);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 });

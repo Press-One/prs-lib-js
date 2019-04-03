@@ -18,7 +18,7 @@ describe('Subscription', function () {
       const res = await client.subscription.getSubscriptionJson(user.address, 0, 10);
       should.exist(res.text);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -27,7 +27,7 @@ describe('Subscription', function () {
       const res = await client.subscription.getSubscriptions(user.address, 0, 10);
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -36,7 +36,7 @@ describe('Subscription', function () {
       const res = await client.subscription.getSubscribers(user.address, 0, 10);
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -45,7 +45,7 @@ describe('Subscription', function () {
       const res = await client.subscription.getRecommendationJson(0, 10);
       should.exist(res.text);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -54,7 +54,7 @@ describe('Subscription', function () {
       const res = await client.subscription.getRecommendations(0, 10);
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -64,7 +64,7 @@ describe('Subscription', function () {
       const res = await client.subscription.subscribe(developer.address);
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -73,7 +73,7 @@ describe('Subscription', function () {
       const res = await client.subscription.checkSubscription(user.address, developer.address);
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -82,7 +82,7 @@ describe('Subscription', function () {
       const res = await client.subscription.unsubscribe(developer.address);
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 });

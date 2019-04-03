@@ -35,7 +35,7 @@ describe('Contracts', function () {
       const res = await client.contract.getTemplates();
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -52,7 +52,7 @@ describe('Contracts', function () {
       contractRId = res.body.contract.rId;
       should.exist(contractRId);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -65,7 +65,7 @@ describe('Contracts', function () {
       fileRId = res.body.cache.rId;
       should.exist(fileRId);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -74,7 +74,7 @@ describe('Contracts', function () {
       const res = await client.contract.bind(contractRId, fileRId, user.address);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -83,7 +83,7 @@ describe('Contracts', function () {
       const res = await client.contract.getByRId(contractRId);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -92,7 +92,7 @@ describe('Contracts', function () {
       const res = await client.contract.getContracts({ offset: 0, limit: 1 });
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -102,7 +102,7 @@ describe('Contracts', function () {
       const res = await buyerClient.contract.createOrder(contractRId, fileRId, 'usage1');
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -112,7 +112,7 @@ describe('Contracts', function () {
       const res = await buyerClient.contract.getOrdersByContractRId(contractRId, null, { offset: 0, limit: 1 });
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -122,7 +122,7 @@ describe('Contracts', function () {
       const res = await buyerClient.contract.getPurchasedOrders({ offset: 0, limit: 1 });
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 });

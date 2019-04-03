@@ -18,7 +18,7 @@ describe('Finance', function () {
       const res = await client.finance.getWallet();
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -27,7 +27,7 @@ describe('Finance', function () {
       const res = await client.finance.getTransactions();
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -36,7 +36,7 @@ describe('Finance', function () {
       const res = await client.finance.recharge(1);
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -45,7 +45,7 @@ describe('Finance', function () {
       const res = await client.finance.withdraw(1);
       should.exist(res.body);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 });

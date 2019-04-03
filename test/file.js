@@ -45,7 +45,7 @@ describe('File', function () {
       fileHash = res.body.cache.msghash;
       fileRId = res.body.cache.rId;
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -58,7 +58,7 @@ describe('File', function () {
       const res = await client.file.signByStream(data, meta);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -67,7 +67,7 @@ describe('File', function () {
       const res = await client.file.getByRId(fileRId);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -76,7 +76,7 @@ describe('File', function () {
       const res = await client.file.getByMsghash(fileHash);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -86,7 +86,7 @@ describe('File', function () {
       const res = await buyClient.file.reward(fileRId, 1, 'hello');
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -95,7 +95,7 @@ describe('File', function () {
       const res = await client.file.getFilesByAddress(user.address, { offset: 0, limit: 10 });
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 });

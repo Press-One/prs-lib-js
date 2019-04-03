@@ -23,7 +23,7 @@ describe('DApp', function () {
       const res = await client.dapp.isNameExist('test app');
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -39,7 +39,7 @@ describe('DApp', function () {
       appAddress = res.body.address;
       should.exist(appAddress);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -55,7 +55,7 @@ describe('DApp', function () {
       appAddress = res.body.address;
       should.exist(appAddress);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -64,7 +64,7 @@ describe('DApp', function () {
       const res = await client.dapp.delete(appAddress);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -81,7 +81,7 @@ describe('DApp', function () {
       appAddress = res.body.address;
       should.exist(appAddress);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -91,7 +91,7 @@ describe('DApp', function () {
       appPrivateKey = res.body.privateKey;
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -100,7 +100,7 @@ describe('DApp', function () {
       const res = await client.dapp.getDApps();
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -110,7 +110,7 @@ describe('DApp', function () {
       console.log(url);
       should.exist(url);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -121,7 +121,7 @@ describe('DApp', function () {
       code = res.body.code;
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -130,7 +130,7 @@ describe('DApp', function () {
       const res = await client.dapp.authByCode(code, appAddress, appPrivateKey);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -140,7 +140,7 @@ describe('DApp', function () {
       const res = await userClient.dapp.authenticate(appAddress, keyPair.address);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 
@@ -150,7 +150,7 @@ describe('DApp', function () {
       const res = await userClient.dapp.deauthenticate(appAddress, keyPair.address);
       res.status.should.equal(200);
     } catch (err) {
-      assert.fail(JSON.stringify(err.response));
+      assert.fail(err);
     }
   });
 });
