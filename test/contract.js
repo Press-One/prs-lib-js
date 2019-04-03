@@ -3,10 +3,17 @@
 const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
-const { user, buyer } = require('../fixtures');
+const should = require('chai').should();
 const utility = require('prs-utility');
+const { user, buyer } = require('../fixtures');
 const PRS = require('../lib/prs');
-const client = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
+
+const client = new PRS({
+  env: 'env',
+  debug: true,
+  privateKey: utility.recoverPrivateKey(user.keystore, user.password),
+  address: user.address
+});
 
 let contractRId = null;
 let fileRId = null;
@@ -19,7 +26,7 @@ before(function () {
 });
 
 after(function () {
-  fs.unlinkSync(markdownFileUrl)
+  fs.unlinkSync(markdownFileUrl);
 });
 
 describe('Contracts', function () {
@@ -53,7 +60,7 @@ describe('Contracts', function () {
     this.timeout(1000 * 200);
     try {
       const stream = fs.createReadStream(markdownFileUrl);
-      let data = { stream: stream, filename: 'xxx.md', title: 'xxx' }
+      let data = { stream: stream, filename: 'xxx.md', title: 'xxx' };
       const res = await client.file.signByStream(data);
       fileRId = res.body.cache.rId;
       should.exist(fileRId);
@@ -79,7 +86,6 @@ describe('Contracts', function () {
       assert.fail(JSON.stringify(err.response));
     }
   });
-
 
   it('get contracts', async function () {
     try {

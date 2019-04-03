@@ -1,13 +1,18 @@
 'use strict';
 
 const assert = require('assert');
-const { user, developer } = require('../fixtures');
+const should = require('chai').should();
 const utility = require('prs-utility');
+const { user, developer } = require('../fixtures');
 const PRS = require('../lib/prs');
-const client = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
+const client = new PRS({
+  env: 'env',
+  debug: true,
+  privateKey: utility.recoverPrivateKey(user.keystore, user.password),
+  address: user.address
+});
 
 describe('Subscription', function () {
-
   it('get subscription json', async function () {
     try {
       const res = await client.subscription.getSubscriptionJson(user.address, 0, 10);
@@ -54,7 +59,8 @@ describe('Subscription', function () {
   });
 
   it('subscribe', async function () {
-    try {;
+    try {
+      ;
       const res = await client.subscription.subscribe(developer.address);
       should.exist(res.body);
     } catch (err) {
@@ -70,7 +76,6 @@ describe('Subscription', function () {
       assert.fail(JSON.stringify(err.response));
     }
   });
-
 
   it('unsubscribe', async function () {
     try {

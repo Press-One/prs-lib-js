@@ -1,11 +1,16 @@
 'use strict';
 
 const assert = require('assert');
-const { user, developer } = require('../fixtures');
+const should = require('chai').should();
 const utility = require('prs-utility');
 const PRS = require('../lib/prs');
-const client = new PRS({ env: 'env', debug: true, privateKey:utility.recoverPrivateKey(developer.keystore, developer.password), address: developer.address});
-
+const { user, developer } = require('../fixtures');
+const client = new PRS({
+  env: 'env',
+  debug: true,
+  privateKey: utility.recoverPrivateKey(developer.keystore, developer.password),
+  address: developer.address
+});
 
 let appAddress = null;
 let appPrivateKey = null;
@@ -13,7 +18,6 @@ let keyPair = utility.createKeyPair({ dump: true });
 let code = null;
 
 describe('DApp', function () {
-  
   it('check name is exists', async function () {
     try {
       const res = await client.dapp.isNameExist('test app');
@@ -29,8 +33,8 @@ describe('DApp', function () {
         name: 'Test APP ' + new Date(),
         description: 'This is a testing app.',
         url: 'http://xxxx.com',
-        redirectUrl: 'http://press.one/auth',
-      }; 
+        redirectUrl: 'http://press.one/auth'
+      };
       const res = await client.dapp.create(dapp);
       appAddress = res.body.address;
       should.exist(appAddress);
@@ -45,8 +49,8 @@ describe('DApp', function () {
         name: 'Test APP ' + new Date(),
         description: 'update dapp',
         url: 'http://xxxx.com',
-        redirectUrl: 'http://xxxx.com/auth',
-      }; 
+        redirectUrl: 'http://xxxx.com/auth'
+      };
       const res = await client.dapp.update(appAddress, dapp);
       appAddress = res.body.address;
       should.exist(appAddress);
@@ -70,8 +74,8 @@ describe('DApp', function () {
         name: 'Test APP ' + new Date(),
         description: 'This is a testing app.',
         url: 'http://press.one/auth',
-        redirectUrl: 'http://press.one/auth',
-      }; 
+        redirectUrl: 'http://press.one/auth'
+      };
       const res = await client.dapp.create(dapp);
       console.log(res.body);
       appAddress = res.body.address;
@@ -112,7 +116,7 @@ describe('DApp', function () {
 
   it('mock web auth', async function () {
     try {
-      const userClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address});
+      const userClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
       const res = await userClient.dapp.webAuthorize(appAddress);
       code = res.body.code;
       res.status.should.equal(200);
@@ -120,7 +124,7 @@ describe('DApp', function () {
       assert.fail(JSON.stringify(err.response));
     }
   });
-  
+
   it('auth by code', async function () {
     try {
       const res = await client.dapp.authByCode(code, appAddress, appPrivateKey);
@@ -132,7 +136,7 @@ describe('DApp', function () {
 
   it('authenticate', async function () {
     try {
-      const userClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address});
+      const userClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
       const res = await userClient.dapp.authenticate(appAddress, keyPair.address);
       res.status.should.equal(200);
     } catch (err) {
@@ -140,10 +144,9 @@ describe('DApp', function () {
     }
   });
 
-
   it('deauthenticate', async function () {
     try {
-      const userClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address});
+      const userClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
       const res = await userClient.dapp.deauthenticate(appAddress, keyPair.address);
       res.status.should.equal(200);
     } catch (err) {

@@ -1,10 +1,16 @@
 'use strict';
 
 const assert = require('assert');
-const { user, avatarBase64String } = require('../fixtures');
+const should = require('chai').should();
 const utility = require('prs-utility');
+const { user, avatarBase64String } = require('../fixtures');
 const PRS = require('../lib/prs');
-const client = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
+const client = new PRS({
+  env: 'env',
+  debug: true,
+  privateKey: utility.recoverPrivateKey(user.keystore, user.password),
+  address: user.address
+});
 
 describe('User', function () {
   it('get profile', async function () {
@@ -18,7 +24,7 @@ describe('User', function () {
 
   it('edit profile', async function () {
     try {
-      const name = `pressone test ${String(Date.now())}`
+      const name = `pressone test ${String(Date.now())}`;
       let profile = {
         name: name,
         title: 'test title'

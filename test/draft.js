@@ -1,10 +1,15 @@
 'use strict';
 
 const assert = require('assert');
-const { user, developer } = require('../fixtures');
 const utility = require('prs-utility');
+const { user } = require('../fixtures');
 const PRS = require('../lib/prs');
-const client = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
+const client = new PRS({
+  env: 'env',
+  debug: true,
+  privateKey: utility.recoverPrivateKey(user.keystore, user.password),
+  address: user.address
+});
 
 let draftId = null;
 
@@ -15,7 +20,7 @@ describe('Draft', function () {
         title: `draft title ${String(Date.now())}`,
         content: `draft content ${String(Date.now())}`,
         mimeType: 'text/plain'
-      }
+      };
       const res = await client.draft.create(draft);
       res.status.should.equal(200);
       draftId = res.body.draftId;
@@ -30,7 +35,7 @@ describe('Draft', function () {
         title: `draft update title ${String(Date.now())}`,
         content: `draft update content ${String(Date.now())}`,
         mimeType: 'text/plain'
-      }
+      };
       const res = await client.draft.update(draftId, draft);
       res.status.should.equal(200);
     } catch (err) {

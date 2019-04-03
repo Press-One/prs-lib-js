@@ -1,13 +1,17 @@
 'use strict';
 
 const assert = require('assert');
-const { user, buyer } = require('../fixtures');
-const utility = require('prs-utility');
-const PRS = require('../lib/prs');
-const client = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
-
 const fs = require('fs');
 const path = require('path');
+const utility = require('prs-utility');
+const { user, buyer } = require('../fixtures');
+const PRS = require('../lib/prs');
+const client = new PRS({
+  env: 'env',
+  debug: true,
+  privateKey: utility.recoverPrivateKey(user.keystore, user.password),
+  address: user.address
+});
 
 let fileHash = null;
 let fileRId = null;
@@ -26,8 +30,8 @@ before(function () {
 });
 
 after(function () {
-  fs.unlinkSync(markdownFileUrl)
-  fs.unlinkSync(markdownFileUrl2)
+  fs.unlinkSync(markdownFileUrl);
+  fs.unlinkSync(markdownFileUrl2);
 });
 
 describe('File', function () {
@@ -88,7 +92,7 @@ describe('File', function () {
 
   it('get files', async function () {
     try {
-      const res = await client.file.getFilesByAddress(user.address, {offset: 0, limit: 10});
+      const res = await client.file.getFilesByAddress(user.address, { offset: 0, limit: 10 });
       res.status.should.equal(200);
     } catch (err) {
       assert.fail(JSON.stringify(err.response));

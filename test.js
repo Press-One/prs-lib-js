@@ -1,23 +1,19 @@
 'use strict';
 
-let Mocha     = require('mocha'),
-    argv      = require('yargs').argv,
-    mocha     = new Mocha({ grep: argv.grep || '', timeout: 10000 }),
-    casePath  = __dirname + '/test/';
-
-global.should  = require('chai').should();
-global.expect  = require('chai').expect;
-
-global.fileHost = 'https://storage.googleapis.com/pressone/';
+const Mocha = require('mocha');
+const path = require('path');
+const argv = require('yargs').argv;
+const mocha = new Mocha({ grep: argv.grep || '', timeout: 10000 });
+const casePath = path.join(__dirname, '/test/');
 
 require('fs').readdirSync(casePath).forEach((file) => {
-    if (file.endsWith('.js')) {
-        let path = `${casePath}${file}`;
-        mocha.addFile(path);
-    }
+  if (file.endsWith('.js')) {
+    let path = `${casePath}${file}`;
+    mocha.addFile(path);
+  }
 });
 
 // Run the tests.
 mocha.run((failures) => {
-    process.exitCode = failures ? -1 : 0;  // exit with non-zero status if there were failures
+  process.exitCode = failures ? -1 : 0; // exit with non-zero status if there were failures
 });

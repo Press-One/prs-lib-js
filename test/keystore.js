@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('assert');
+const should = require('chai').should();
 const { user } = require('../fixtures');
 const PRS = require('../lib/prs');
 const client = new PRS({ env: 'env', debug: true });

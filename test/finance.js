@@ -1,13 +1,18 @@
 'use strict';
 
 const assert = require('assert');
-const { user, developer } = require('../fixtures');
+const should = require('chai').should();
 const utility = require('prs-utility');
 const PRS = require('../lib/prs');
-const client = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
+const { user } = require('../fixtures');
+const client = new PRS({
+  env: 'env',
+  debug: true,
+  privateKey: utility.recoverPrivateKey(user.keystore, user.password),
+  address: user.address
+});
 
 describe('Finance', function () {
-
   it('get wallet', async function () {
     try {
       const res = await client.finance.getWallet();
@@ -43,5 +48,4 @@ describe('Finance', function () {
       assert.fail(JSON.stringify(err.response));
     }
   });
-
 });
