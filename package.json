@@ -3,7 +3,8 @@
   "description": "Social Identity / Publish System based on Blockchain.",
   "version": "0.0.5",
   "homepage": "https://press.one",
-  "main": "./lib/prs.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "author": "PRESS.one",
   "repository": {
     "type": "git",
@@ -15,7 +16,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "prs-utility": "0.0.1",
+    "prs-utility": "^0.0.1",
     "superagent": "^4.1.0"
   },
   "devDependencies": {
