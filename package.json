@@ -16,7 +16,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "prs-utility": "^0.0.1",
+    "prs-utility": "chux0519/prs-utility-js#master",
     "superagent": "^4.1.0"
   },
   "devDependencies": {
