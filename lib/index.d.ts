@@ -28,16 +28,16 @@ interface User {
 interface Subscription {
   new(config: PRSConfig): Subscription;
   getSubscriptionJson(address: string, offset: number, limit: number):
-      Promise<any>;
+    Promise<any>;
   getSubscriptions(address: string, offset: number, limit: number):
-      Promise<any>;
+    Promise<any>;
   getSubscribers(address: string, offset: number, limit: number): Promise<any>;
   getRecommendationJson(offset: number, limit: number): Promise<any>;
   getRecommendations(offset: number, limit: number): Promise<any>;
-  subscribe(address: string): Prmose<any>;
-  unsubscribe(address: string): Prmose<any>;
+  subscribe(address: string): Promise<any>;
+  unsubscribe(address: string): Promise<any>;
   checkSubscription(subscriberAddress: string, publisherAddress: string):
-      Promise<any>;
+    Promise<any>;
 }
 
 interface PageOpt {
@@ -60,7 +60,7 @@ interface FileData {
   source?: string;
   originUrl?: string;
   category?: string;
-  projectId?: string|number;  // FIXME:
+  projectId?: string | number;
 }
 interface File {
   new(config: PRSConfig): File;
@@ -69,7 +69,7 @@ interface File {
   signByBuffer(data: FileData, meta: object): Promise<any>;
   getByRId(rId: string): Promise<any>;
   getByMsghash(msghash: string): Promise<any>;
-  reward(rId: string, amount: number, comment: string): Primise<any>;
+  reward(rId: string, amount: number, comment: string): Promise<any>;
   getFilesByAddress(address: string, opt: PageOpt): Promise<any>;
 }
 
@@ -101,11 +101,11 @@ interface Contract {
   getTemplates(type: string): Promise<any>;
   create(code: string): Promise<any>;
   bind(contractRId: string, fileRId: string, beneficiaryAddress: string):
-      Promise<any>;
+    Promise<any>;
   getByRId(rId: string): Promise<any>;
   getContracts(opt: PageOpt): Promise<any>;
   createOrder(contractRId: string, fileRId: string, licenseType: string):
-      Promise<any>;
+    Promise<any>;
   getOrdersByContractRId(contractRId: string, opt: PageOpt): Promise<any>;
   getPurchasedOrders(opt: PageOpt): Promise<any>;
 }
@@ -128,14 +128,14 @@ interface Dapp {
   getAuthorizeUrl(appAddress: string): Promise<any>;
   webAuthorize(appAddress: string): Promise<any>;
   authByCode(code: string, appAddress: string, appPrivateKey: string):
-      Promise<any>;
+    Promise<any>;
   authenticate(appAddress: string, authAddress: string): Promise<any>;
   deauthenticate(appAddress: string, authAddress: string): Promise<any>;
 }
 
 interface SignUtil {
   signByToken(data: any, token: string, host: string): Promise<any>;
-  hashByFileReader(file: any, cb: function): Promise<any>;
+  hashByFileReader(file: any, cb: (progress: number) => void): Promise<any>;
   hashByReadableStream(stream: any): Promise<any>;
   hashByPassword(email: string, password: string): string;
 }
