@@ -133,6 +133,7 @@ declare module 'prs-lib' {
   }
 
   interface AuthHeader {
+    [name: string]: string | string[];
     'Content-Type': string;
     'X-Po-Auth-Address': string;
     'X-Po-Auth-Sig': string;
