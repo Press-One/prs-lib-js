@@ -74,7 +74,7 @@ declare module 'prs-lib' {
 
   interface Block {
     new(config: PRSConfig): Block;
-    getByRIds(rIds: [string]): Promise<any>;
+    getByRIds(rIds: [string], withDetail: boolean): Promise<any>;
   }
 
   interface DraftContent {

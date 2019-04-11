@@ -4,7 +4,7 @@ const assert = require('assert');
 const should = require('chai').should();
 const utility = require('prs-utility');
 const { user, developer } = require('../fixtures');
-const PRS = require('../lib/prs');
+const PRS = require('../lib');
 const client = new PRS({
   env: 'env',
   debug: true,

@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const utility = require('prs-utility');
 const { user, buyer } = require('../fixtures');
-const PRS = require('../lib/prs');
+const PRS = require('../lib');
 const client = new PRS({
   env: 'env',
   debug: true,

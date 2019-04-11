@@ -3,7 +3,7 @@
 const assert = require('assert');
 const utility = require('prs-utility');
 const { user } = require('../fixtures');
-const PRS = require('../lib/prs');
+const PRS = require('../lib');
 const client = new PRS({
   env: 'env',
   debug: true,
