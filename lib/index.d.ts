@@ -107,6 +107,7 @@ declare module 'prs-lib' {
       Promise<any>;
     getOrdersByContractRId(contractRId: string, opt: PageOpt): Promise<any>;
     getPurchasedOrders(opt: PageOpt): Promise<any>;
+    getOrderByRId(rId: string): Promise<any>;
   }
 
   interface DappContent {

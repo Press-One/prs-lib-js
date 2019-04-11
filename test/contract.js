@@ -106,6 +106,21 @@ describe('Contracts', function () {
     }
   });
 
+  it('get order by rId', async function () {
+    try {
+      const buyerClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
+      const validRId = '84f20b6885f02a2759d5414e360521fc410efa88c408fbcb2572cb9886baed50';
+      const res = await buyerClient.contract.getOrderByRId(validRId);
+      res.status.should.equal(200);
+      res.body.should.have.own.property('order');
+      res.body.should.have.own.property('contract');
+      res.body.should.have.own.property('license');
+      res.body.order.rId.should.equal(validRId);
+    } catch (err) {
+      assert.fail(err);
+    }
+  });
+
   it('get contract orders', async function () {
     try {
       const buyerClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
