@@ -145,7 +145,7 @@ declare module 'prs-lib' {
     hashByReadableStream(stream: any): Promise<any>;
     hashByPassword(email: string, password: string): string;
     hashRequest(path: string, payload: object): string;
-    signRequest(path: string, payload: object, privateKey: string): string;
+    signRequest(path: string, payload: object, privateKey: string): { hash: string, signature: string };
     getAuthHeader(path: string, payload: object, privateKey: string): AuthHeader;
   }
 
