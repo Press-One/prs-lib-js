@@ -5,7 +5,7 @@ const chai = require('chai');
 const path = require('path');
 const argv = require('yargs').argv;
 
-const mocha = new Mocha({ grep: argv.grep || '', timeout: 10000 });
+const mocha = new Mocha({ grep: argv.grep || '', timeout: 60000 });
 const casePath = path.join(__dirname, '/test/');
 
 // Add `should` to Object.prototype
