@@ -237,3 +237,188 @@ console.log(deAuthRes)
     - appAuthentication
       - status: 'CANCELED'
       - other meta data
+
+### prs.file
+
+`prs.file` 封装了对文件的签名、获取、打赏等功能
+
+#### signByFileReader
+
+限定在浏览器中使用，使用 filereader 进行签名
+
+#### signByStream
+
+限定在 node 项目使用，对 Readable Streams 进行签名
+
+```javascript
+const rStream = new Readable()
+const now = Date.now().toString()
+rStream.push(Buffer.from(now))
+rStream.push(null)
+
+const data = {
+  stream: rStream,
+  filename: `test stream ${now}.md`, // 目前暂时只支持 markdown 文件和图片
+  title: `test title ${now}`
+};
+const meta = null
+const signStreamRes = await prs.file.signByStream(
+  data,
+  meta // no meta data
+).then(res => res.body)
+console.log(signStreamRes)
+```
+
+- params:
+  - data
+    - stream: Readable
+    - filename: string
+    - titlle: string
+    - source (optional): string
+    - originUrl (optional): string
+    - category (optional): string
+    - projectId (optional): string
+- returns: Promise
+  - res.data
+    - cache
+      - msghash: string
+      - rId: string
+      - address: string
+      - other data
+    - block: object 参考[PRS 协议](https://developer.press.one/docs/0-4-block#%E6%96%87%E4%BB%B6%E7%AD%BE%E5%90%8D)
+
+#### signByBuffer
+
+对 buffer 进行签名
+
+```javascript
+const data = {
+  buffer: Buffer.from(now + 'buffer'),
+  filename: `test buffer ${now}.md`,
+  title: `test buffer title ${now}`
+}
+const meta = null
+const signBufferRes = await prs.file.signByBuffer(
+  data,
+  meta
+).then(res => res.body)
+console.log(signBufferRes)
+```
+
+- params:
+  - data
+    - buffer: Buffer
+    - filename: string
+    - titlle: string
+    - source (optional): string
+    - originUrl (optional): string
+    - category (optional): string
+    - projectId (optional): string
+- returns: Promise(同上)
+
+#### getByRId
+
+根据 id 查询文件记录
+
+```javascript
+const fileByRIdRecord = await prs.file.getByRId(signBufferRes.cache.rId)
+  .then(res => res.body);
+console.log(fileByRIdRecord)
+```
+
+- params:
+  - id: string
+- returns: Promise
+  - res.data
+    - block 同上
+    - cache 同上
+    - contracts: [Contract(详见下)]
+
+#### getByMsghash
+
+跟据 hash 查询文件记录
+
+```javascript
+const fileByMsgHashRecord = await prs.file.getByMsghash(signBufferRes.cache.msghash)
+  .then(res => res.body);
+console.log(fileByMsgHashRecord)
+```
+
+参数和返回结果同 `getByRId`
+
+#### getFilesByAddress
+
+根据用户的 address 获取该用户所有的文件记录
+
+```javascript
+const pageOpt = {
+  limit: 10,
+  offset:0
+}
+const files = await prs.file.getFilesByAddress(address, pageOpt)
+  .then(res => res.body);
+console.log(files)
+```
+
+- params:
+  - address: string
+  - pageOpt:
+    - limit: number
+    - offset: number
+- returns: Promise
+  - res.data
+    - author: object
+      - name: string
+      - url: string
+      - avatar: string
+    - items: array
+      - id: string
+      - title: string
+      - url: string
+      - ... 其他属性
+    - _total: number
+
+#### reward
+
+打赏（注意这里是 PRS 站内行为，不上链）
+
+```javascript
+// 这里使用 user 的身份，避免自己不能给自己付钱
+const prs = new PRS({
+  env: 'env', debug: true, privateKey, address
+})
+const rewardRes = await prs.file.reward(
+  forFileRId,
+  amount,
+  comment
+  ).then(res => res.body);
+console.log(rewardRes)
+```
+
+- params:
+  - forFileRId: string
+  - amount: number
+  - comment: string
+- returns: Promise
+  - res.data
+    - id: number
+    - fromAddress: string
+    - toAddress: string
+    - amount: string
+    - comment: string
+    - status: string
+    - provider: string
+    - forFileRId: string
+    - viewToken: string
+
+### prs.contract
+
+`prs.contract` 封装了对合约的操作，包括创建、绑定合约，交易授权等等。
+
+### prs.finance
+
+`prs.finance` 封装了对钱包的操作，包括充值、提取等。
+
+### prs.block
+
+`prs.block` 提供对区块的查询功能。
