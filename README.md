@@ -411,14 +411,102 @@ console.log(rewardRes)
     - forFileRId: string
     - viewToken: string
 
-### prs.contract
-
-`prs.contract` 封装了对合约的操作，包括创建、绑定合约，交易授权等等。
-
 ### prs.finance
 
 `prs.finance` 封装了对钱包的操作，包括充值、提取等。
 
+#### getWallet
+
+获取钱包接口
+
+```javascript
+// 获取钱包
+const walletRes = await client.finance.getWallet()
+console.log(walletRes.body)
+```
+
+- returns: Promise
+  - res.data
+    - balance
+      - income: string
+      - expenditure: string
+      - frozen: string
+      - balance: string
+      - available: string
+    - summary
+      - ALL: number
+      - AWARD: number
+      - WITHDRAW: number
+      - BONUS: number
+      - RECHARGE: number
+      - TRANSFER: number
+      - CONTRACT_LICENSE_PURCHASE: number
+      - COUPON: number
+
+#### getTransactions
+
+获取交易历史记录
+
+```javascript
+// 获取交易历史记录
+const transactionsRes = await client.finance.getTransactions({ offset: 0, limit: 1 })
+console.log(transactionsRes.body)
+```
+
+- params:
+  - offset: number
+  - limit: number
+- returns: Promise
+  - res.data
+    - list: array
+      - fromAddress: string
+      - toAddress: string
+      - amount: string
+      - other props...
+    - total: number
+
+#### recharge
+
+充值接口
+
+```javascript
+const rechargeRes = await client.finance.recharge(1)
+console.log(rechargeRes.body)
+```
+
+- params:
+  - amount: number
+- returns: Promise
+  - res.data
+    - receipt: object
+      - fromAddress: string
+      - toAddress: string
+      - amount: string
+      - other props...
+
+#### withdraw
+
+提现接口
+
+```javascript
+const withdrawRes = await client.finance.withdraw(1)
+console.log(withdrawRes.body)
+```
+
+- params:
+  - amount: number
+- returns: Promise
+  - res.data
+    - receipt: object
+      - fromAddress: string
+      - toAddress: string
+      - amount: string
+      - other props...
+
 ### prs.block
 
 `prs.block` 提供对区块的查询功能。
+
+### prs.contract
+
+`prs.contract` 封装了对合约的操作，包括创建、绑定合约，交易授权等等。
