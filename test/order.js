@@ -5,7 +5,7 @@ const path = require('path');
 const assert = require('assert');
 const should = require('chai').should();
 const utility = require('prs-utility');
-const { user } = require('../fixtures');
+const { user, buyer } = require('../fixtures');
 const PRS = require('../lib');
 
 const client = new PRS({
@@ -29,16 +29,7 @@ after(function () {
   fs.unlinkSync(markdownFileUrl);
 });
 
-describe('Contracts', function () {
-  it('get templages', async function () {
-    try {
-      const res = await client.contract.getTemplates();
-      res.status.should.equal(200);
-    } catch (err) {
-      assert.fail(err);
-    }
-  });
-
+describe('Orders', function () {
   it('create contract', async function () {
     this.timeout(1000 * 200);
     try {
@@ -78,18 +69,45 @@ describe('Contracts', function () {
     }
   });
 
-  it('get contract', async function () {
+  it('create order', async function () {
     try {
-      const res = await client.contract.getByRId(contractRId);
+      const buyerClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
+      const res = await buyerClient.order.createOrder(contractRId, fileRId, 'usage1');
       res.status.should.equal(200);
     } catch (err) {
       assert.fail(err);
     }
   });
 
-  it('get contracts', async function () {
+  it('get order by rId', async function () {
     try {
-      const res = await client.contract.getContracts({ offset: 0, limit: 1 });
+      const buyerClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
+      const validRId = '84f20b6885f02a2759d5414e360521fc410efa88c408fbcb2572cb9886baed50';
+      const res = await buyerClient.order.getOrderByRId(validRId);
+      res.status.should.equal(200);
+      res.body.should.have.own.property('order');
+      res.body.should.have.own.property('contract');
+      res.body.should.have.own.property('license');
+      res.body.order.rId.should.equal(validRId);
+    } catch (err) {
+      assert.fail(err);
+    }
+  });
+
+  it('get contract orders', async function () {
+    try {
+      const buyerClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
+      const res = await buyerClient.order.getOrdersByContractRId(contractRId, null, { offset: 0, limit: 1 });
+      res.status.should.equal(200);
+    } catch (err) {
+      assert.fail(err);
+    }
+  });
+
+  it('get purchased orders', async function () {
+    try {
+      const buyerClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
+      const res = await buyerClient.order.getPurchasedOrders({ offset: 0, limit: 1 });
       res.status.should.equal(200);
     } catch (err) {
       assert.fail(err);

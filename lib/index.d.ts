@@ -103,6 +103,10 @@ declare module 'prs-lib' {
       Promise<any>;
     getByRId(rId: string): Promise<any>;
     getContracts(opt: PageOpt): Promise<any>;
+  }
+
+  interface Order {
+    new(config: PRSConfig): Contract;
     createOrder(contractRId: string, fileRId: string, licenseType: string):
       Promise<any>;
     getOrdersByContractRId(contractRId: string, opt: PageOpt): Promise<any>;
@@ -161,6 +165,7 @@ declare module 'prs-lib' {
     block: Block;
     draft: Draft;
     contract: Contract;
+    order: Order;
     dapp: Dapp;
     util: SignUtil;
   }
