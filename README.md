@@ -28,7 +28,7 @@ PRS 目前提供了两个环境供开发者使用：
 4. DApp 在合适的时候引导用户进行授权。
 5. 授权成功后即可进行签名发布文件、创建合约等操作。
 
-[PRS SDK](https://github.com/Press-One/prs-sdk-js) 中有不同场景的使用示例，开发者可前往下载。具体的使用方法，请参考[开发文档](https://developer.press.one)。
+[PRS SDK](https://github.com/Press-One/prs-sdk-js) 中有不同场景的使用示例，开发者可前往下载，配合 [API](API.md) 文档进行阅读。更多信息，请参考[开发者网站](https://developer.press.one)。
 
 ### 安装
 
