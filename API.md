@@ -84,6 +84,10 @@ prs-lib 暴露一个 PRS 类，PRS 主要对 REST API 进行了封装，方便�
   - [signRequest](#utilsignRequest)
   - [getAuthHeader](#utilgetAuthHeader)
 
+所有模块的示例都在 `prs-sdk/samples` 目录下给出，例如 `prs.dapp` 的示例文件对应为 `prs-sdk/samples/dapp.example.js`
+
+`prs-lib` 和 `prs-utility` 均提供 type 文件，并且都是一层薄封装，推荐配合源码查看。
+
 ### prs.config
 
 可访问当前 prs 实例创建时的身份信息，比如 `prs.config.env` 对应构造函数传入的 `options.env`。
