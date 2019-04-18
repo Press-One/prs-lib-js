@@ -104,74 +104,49 @@ prs-lib 暴露一个 PRS 类，PRS 主要对 REST API 进行了封装，方便�
 
 创建草稿操作
 
-```javascript
-const draft = {
-  title: `draft title ${String(Date.now())}`,
-  content: `draft content ${String(Date.now())}`,
-  mimeType: 'text/plain'
-}
-const draftRes = await prs.draft.create(draft)
-console.log(draftRes.body)
-const draftId = draftRes.body.draftId
-```
+> create(draft: DraftContent): Promise
 
 - params: Draft
   - Draft.title: string
   - Draft.content: string
   - Draft.mimeType: string
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - draftId: number
 
 #### draft.update
 
 更新草稿
 
-```javascript
-// 根据 id 更新草稿内容
-const draftNew = {
-  title: `draft update title ${String(Date.now())}`,
-  content: `draft update content ${String(Date.now())}`,
-  mimeType: 'text/plain'
-}
-const updateRes = await prs.draft.update(draftId, draftNew)
-console.log(updateRes.body)
-```
+> update(id: string, draft: DraftContent): Promise
 
 - params:
   - draftId: number
   - draftNew: Draft
-- returns: Promise
-  - res.body: boolean
+- returns: Promise<Response\>
+  - Response.body: boolean
 
 #### draft.delete
 
 删除草稿
 
-```javascript
-const deleteRes = await prs.draft.delete(draftId)
-console.log(deleteRes.body)
-```
+> delete(id: string): Promise
 
 - params:
   - draftId: string
-- returns: Priomise
-  - res.body: boolean
+- returns: Promise<Response\>
+  - Response.body: boolean
 
 #### draft.getById
 
-获取草稿
+根据 id 获取草稿
 
-```javascript
-// 根据 id 获取草稿
-const res = await prs.draft.getById(draftId)
-console.log(res.body)
-```
+> getById(id: string): Promise
 
 - params:
   - draftId: string
-- returns: Priomise
-  - res.body
+- returns: Promise<Response\>
+  - Response.body
     - file: object
       - id: string
       - other props..
@@ -185,14 +160,10 @@ console.log(res.body)
 
 获取所有 draft
 
-```javascript
-// 获取所有草稿
-const draftsRes = await prs.draft.getDrafts();
-console.log(draftsRes.body)
-```
+> getDrafts(): Promise
 
-- returns: Promise
-  - res.body
+- returns: Promise<Response\>
+  - Response.body
     - data: object
       - total: number
       - list: [Draft]
@@ -205,26 +176,13 @@ console.log(draftsRes.body)
 
 创建接口，调用接口进行 dapp 的创建，为了避免名称冲突，另外还提供了 dapp 名称的查询接口： `isNameExist`。
 
-```javascript
-const dapp = {};
-const name = 'test dapp' + Date.now();
-const nameAvailable = await prs.dapp.isNameExist(name).then(res => res.body);
-console.log(nameAvailable)
-if (nameAvailable) {
-  const createRes = await prs.dapp.create(dapp);
-  console.log(createRes)
-}
-```
+> isNameExist(name: string): Promise
 
-> prs.dapp.isNameExist(name)
-
-- params:
-  - name: string
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - isExist: boolean
 
-> prs.dapp.create(dapp)
+> create(dapp: DappContent): Promise
 
 - params:
   - dapp.name: string
@@ -244,11 +202,7 @@ if (nameAvailable) {
 
 更新接口，更新 dapp 信息
 
-```javascript
-const updatedRes = await prs.dapp.update(address, dapp)
-  .then(res => res.body)
-console.log(updatedRes)
-```
+> update(address: string, dapp: DappContent): Promise
 
 - params:
   - address: string
@@ -257,25 +211,17 @@ console.log(updatedRes)
 
 #### dapp.delete
 
-```javascript
-const deleteRes = await prs.dapp.delete(address)
-  .then(res => res.body)
-console.log(deleteRes)
-```
+> delete(address: string): Promise
 
 - params:
   - address: string
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - deletedAt: string(UTC时间)
 
 #### dapp.getByAddress
 
-```javascript
-const dappRes = await prs.dapp.getByAddress(createRes.address)
-  .then(res => res.body)
-console.log(dappRes)
-```
+> getByAddress(address: string): Promise
 
 - params:
   - address: string
@@ -283,50 +229,40 @@ console.log(dappRes)
 
 #### dapp.getAuthorizeUrl
 
-```javascript
-// 引导用户使用浏览器访问，进行授权
-const authorizeUrl = prs.dapp.getAuthorizeUrl(createRes.address)
-console.log(authorizeUrl)
-```
+引导用户使用浏览器访问，进行授权
+
+> getAuthorizeUrl(appAddress: string): Promise
 
 - params:
   - address: string
-- returns: string
+- returns: Promise<Response\>
+  - Response.body: string
 
 #### dapp.webAuthorize
 
-```javascript
-// 这里的例子是自己向刚刚创建的 dapp 授权，实际可以传入其他 dapp 的地址进行授权
-const webAuthRes = await prs.dapp.webAuthorize(createRes.address)
-  .then(res => res.body)
-console.log(webAuthRes)
-```
+向目标 dapp 进行授权，传入 dapp 地址，返回 code 和 redirectUrl。目标 dapp 通常会实现 `authByCode` 接受授权。
+
+> webAuthorize(appAddress: string): Promise
 
 - params:
   - address: string
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - code: string
     - redirectUrl: string
 
 #### dapp.authByCode
 
-```javascript
-// 这里需要使用 dapp 的身份进行操作
-const dappClient = new PRS({
-  env: 'env', debug: true, privateKey: dappRes.privateKey, address: createRes.address
-})
-const authRes = await dappClient.dapp.authByCode(webAuthRes.code, createRes.address, dappClient.config.privateKey)
-  .then(res => res.body)
-console.log(authRes)
-```
+dapp 通过 code 接受授权，获取代表用户身份的 token
+
+> authByCode(code: string, appAddress: string, appPrivateKey: string)
 
 - params:
   - code: string
   - address: string (dapp 的 address)
   - privateKey: string (dapp 的 private key)
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - token: string
     - appAuthentication
       - userAddress: string
@@ -338,19 +274,13 @@ console.log(authRes)
 
 取消对 dapp 的授权
 
-```javascript
-// 解除授权
-const deAuthRes = await prs.dapp.deauthenticate(appAddress, authAddress)
-  .then(res => res.body)
-console.log(deAuthRes)
-
-```
+> deauthenticate(appAddress: string, authAddress: string): Promise
 
 - params:
   - appAddress: string
   - authAddress: string
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - appAuthentication
       - status: 'CANCELED'
       - other meta data
@@ -363,28 +293,26 @@ console.log(deAuthRes)
 
 限定在浏览器中使用，使用 filereader 进行签名
 
+> signByFileReader(data: FileData, meta: object): Promise
+
+```typescript
+interface FileData {
+  file?: any;
+  stream?: any;
+  buffer?: any;
+  filename?: string;
+  source?: string;
+  originUrl?: string;
+  category?: string;
+  projectId?: string | number;
+}
+```
+
 #### file.signByStream
 
 限定在 node 项目使用，对 Readable Streams 进行签名
 
-```javascript
-const rStream = new Readable()
-const now = Date.now().toString()
-rStream.push(Buffer.from(now))
-rStream.push(null)
-
-const data = {
-  stream: rStream,
-  filename: `test stream ${now}.md`, // 目前暂时只支持 markdown 文件和图片
-  title: `test title ${now}`
-};
-const meta = null
-const signStreamRes = await prs.file.signByStream(
-  data,
-  meta // no meta data
-).then(res => res.body)
-console.log(signStreamRes)
-```
+> signByStream(data: FileData, meta: object): Promise
 
 - params:
   - data
@@ -395,32 +323,21 @@ console.log(signStreamRes)
     - originUrl (optional): string
     - category (optional): string
     - projectId (optional): string
-- returns: Promise
-  - res.data
+  - meta: 任意结构化的数据，最终将会以 JSON 字符串的形式存储
+- returns: Promise<Response\>
+  - Response.body
     - cache
       - msghash: string
       - rId: string
       - address: string
-      - other data
-    - block: object 参考[PRS 协议](https://developer.press.one/docs/0-4-block#%E6%96%87%E4%BB%B6%E7%AD%BE%E5%90%8D)
+      - 其他属性
+    - block: object （参考[PRS 协议](https://developer.press.one/docs/0-4-block#%E6%96%87%E4%BB%B6%E7%AD%BE%E5%90%8D)）
 
 #### file.signByBuffer
 
 对 buffer 进行签名
 
-```javascript
-const data = {
-  buffer: Buffer.from(now + 'buffer'),
-  filename: `test buffer ${now}.md`,
-  title: `test buffer title ${now}`
-}
-const meta = null
-const signBufferRes = await prs.file.signByBuffer(
-  data,
-  meta
-).then(res => res.body)
-console.log(signBufferRes)
-```
+> signByBuffer(data: FileData, meta: object): Promise
 
 - params:
   - data
@@ -437,16 +354,12 @@ console.log(signBufferRes)
 
 根据 id 查询文件记录
 
-```javascript
-const fileByRIdRecord = await prs.file.getByRId(signBufferRes.cache.rId)
-  .then(res => res.body);
-console.log(fileByRIdRecord)
-```
+> getByRId(rId: string): Promise
 
 - params:
   - id: string
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - block 同上
     - cache 同上
     - contracts: [Contract(详见下)]
@@ -455,11 +368,7 @@ console.log(fileByRIdRecord)
 
 跟据 hash 查询文件记录
 
-```javascript
-const fileByMsgHashRecord = await prs.file.getByMsghash(signBufferRes.cache.msghash)
-  .then(res => res.body);
-console.log(fileByMsgHashRecord)
-```
+> getByMsghash(msghash: string): Promise
 
 参数和返回结果同 `getByRId`
 
@@ -467,14 +376,12 @@ console.log(fileByMsgHashRecord)
 
 根据用户的 address 获取该用户所有的文件记录
 
-```javascript
-const pageOpt = {
-  limit: 10,
-  offset:0
+> getFilesByAddress(address: string, opt: PageOpt): Promise
+
+```typescript
+interface PageOpt {
+  offset: number, limit: number
 }
-const files = await prs.file.getFilesByAddress(address, pageOpt)
-  .then(res => res.body);
-console.log(files)
 ```
 
 - params:
@@ -482,8 +389,8 @@ console.log(files)
   - pageOpt:
     - limit: number
     - offset: number
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - author: object
       - name: string
       - url: string
@@ -499,25 +406,14 @@ console.log(files)
 
 打赏（注意这里是 PRS 站内行为，不上链）
 
-```javascript
-// 这里使用 user 的身份，避免自己不能给自己付钱
-const prs = new PRS({
-  env: 'env', debug: true, privateKey, address
-})
-const rewardRes = await prs.file.reward(
-  forFileRId,
-  amount,
-  comment
-  ).then(res => res.body);
-console.log(rewardRes)
-```
+> reward(rId: string, amount: number, comment: string): Promise
 
 - params:
   - forFileRId: string
   - amount: number
   - comment: string
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - id: number
     - fromAddress: string
     - toAddress: string
@@ -536,14 +432,10 @@ console.log(rewardRes)
 
 获取钱包接口
 
-```javascript
-// 获取钱包
-const walletRes = await client.finance.getWallet()
-console.log(walletRes.body)
-```
+> getWallet(): Promise
 
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - balance
       - income: string
       - expenditure: string
@@ -564,17 +456,13 @@ console.log(walletRes.body)
 
 获取交易历史记录
 
-```javascript
-// 获取交易历史记录
-const transactionsRes = await client.finance.getTransactions({ offset: 0, limit: 1 })
-console.log(transactionsRes.body)
-```
+> getTransactions(opt: PageOpt): Promise
 
 - params:
   - offset: number
   - limit: number
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - list: array
       - fromAddress: string
       - toAddress: string
@@ -586,15 +474,12 @@ console.log(transactionsRes.body)
 
 充值接口
 
-```javascript
-const rechargeRes = await client.finance.recharge(1)
-console.log(rechargeRes.body)
-```
+> recharge(amount: number): Promise
 
 - params:
   - amount: number
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - receipt: object
       - fromAddress: string
       - toAddress: string
@@ -605,15 +490,12 @@ console.log(rechargeRes.body)
 
 提现接口
 
-```javascript
-const withdrawRes = await client.finance.withdraw(1)
-console.log(withdrawRes.body)
-```
+> withdraw(amount: number): Promise
 
 - params:
   - amount: number
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - receipt: object
       - fromAddress: string
       - toAddress: string
@@ -626,17 +508,13 @@ console.log(withdrawRes.body)
 
 #### block.getByRIds
 
-```javascript
-const ids = ['ba03bd584d69b89615ce8db22b4c593342a5ec09b343a7859044a8e4d389c4c2', '65163724a98d29506b1031dc68fa62fb5a7a11fe631fb723a723b2a19e9bb65c']
-const withDetail = true
-// 批量获取指定 rId 的区块数据
-const res = await client.block.getByRIds(ids, withDetail)
-```
+> getByRIds(rIds: [string], withDetail: boolean): Promise
 
 - params:
   - ids: [string]
   - withDetail: boolean
-- returns: array
+- returns: Promise<Response\>
+  - Response.body: [Block]
 
 查询区块的信息，如果 withDetail 为 true，那么每个区块将会携带一些额外信息（比如用户名称、头像等）
 
@@ -646,15 +524,12 @@ const res = await client.block.getByRIds(ids, withDetail)
 
 #### contract.getTemplates
 
-```javascript
-const templatesRes = await prs.contract.getTemplates();
-console.log(templatesRes.body)
-```
+> getTemplates(type: string): Promise
 
 - params:
   type: string
-- returns: Promise
-  - res.body
+- returns: Promise<Response\>
+  - Response.body
     - total: number
     - list: [Contract]
       - Contract.code: string
@@ -669,22 +544,12 @@ console.log(templatesRes.body)
 
 创建合约
 
-```javascript
-const contractCode = `PRSC Ver 0.1
-Name 购买授权
-Desc 这是一个\\n测试合约
-Receiver ${address}
-License usage1 CNB:0.001 Terms: 这是个人使用条款，禁止\\n商业应用。
-License usage2 CNB:0.002 Terms: 这是商业使用条款，允许\\n修改和复制。`
-const contractRes = await prs.contract.create(contractCode)
-console.log(contractRes.body)
-const contractRId = contractRes.body.contract.rId
-```
+> create(code: string): Promise
 
 - params:
   - code: string
-- returns: Promise
-  - res.body
+- returns: Promise<Response\>
+  - Response.body
     - contract.rId: string
 
 #### contract.getByRId
@@ -707,8 +572,8 @@ const contractRId = contractRes.body.contract.rId
   - contractRId: 合约 id
   - fileRId: 文件 id
   - beneficiaryAddress: 受益人地址
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - rId: stirng
     - type: string ('RECEIVER')
     - address: string
@@ -725,8 +590,8 @@ const contractRId = contractRes.body.contract.rId
 - params
   - opt.limit: number
   - opt.offset: number
-- returns: Promise
-  - res.body:
+- returns: Promise<Response\>
+  - Response.body
     - total: number
     - list: [{file: File, contract: Contract, orderSummary: {total: number, amount: string}}]
 
@@ -738,8 +603,8 @@ const contractRId = contractRes.body.contract.rId
 
 > createOrder(contractRId: string, fileRId: string, licenseType: string): Promise
 
-- returns: Promise
-  - res.data
+- returns: Promise<Response\>
+  - Response.body
     - rId: string # 链上的标志，可以用于查询块
     - type: string # 'SENDER'
     - file: string # fileRId
@@ -765,8 +630,8 @@ const contractRId = contractRes.body.contract.rId
 - params
   - opt.limit: number
   - opt.offset: number
-- returns: Promise
-  - res.body:
+- returns: Promise<Response\>
+  - Response.body
     - total: number
     - list: [Order]
       - Order: 同上创建返回的数据结构
@@ -783,8 +648,8 @@ const contractRId = contractRes.body.contract.rId
 - params
   - opt.limit: number
   - opt.offset: number
-- returns: Promise
-  - res.body:
+- returns: Promise<Response\>
+  - Response.body
     - total: number
     - list: [{file: File, order: Order, contract: Contract}]
 
@@ -792,8 +657,8 @@ const contractRId = contractRes.body.contract.rId
 
 > getOrderByRId(rId: string): Promise;
 
-- returns: Promise
-  - res.body:
+- returns: Promise<Response\>
+  - Response.body
     - order: Order
 
 ### prs.keystore
@@ -804,8 +669,8 @@ const contractRId = contractRes.body.contract.rId
 
 > getByEmail(email: string, password: string): Promise
 
-- returns: Promise
-  - res.data:
+- returns: Promise<Response\>
+  - Response.body
     - token: string
     - keystore: sting # json string
 
@@ -813,8 +678,8 @@ const contractRId = contractRes.body.contract.rId
 
 > getByPhone(phone: string, code: string): Promise;
 
-- returns: Promise
-  - res.data:
+- returns: Promise<Response\>
+  - Response.body
     - token: string
     - keystore: sting # json string
 
@@ -826,8 +691,8 @@ const contractRId = contractRes.body.contract.rId
 
 > getByAddress(address: string): Promise
 
-- returns: Promise
-  - res.data:
+- returns: Promise<Response\>
+  - Response.body
     - address: string
     - avatar: string
     - title: string
@@ -860,7 +725,7 @@ const contractRId = contractRes.body.contract.rId
 - params:
   - address: 订阅者地址
 - returns: Promise<Response\>
-  - Response.data
+  - Response.body
     - total: number
     - list: [SubscrptionData]
 
@@ -873,7 +738,7 @@ const contractRId = contractRes.body.contract.rId
 - params:
   - address: 订阅者地址
 - returns: Promise<Response\>
-  - Response.data
+  - Response.body
     - version: string # json feed 的版本号
     - user_comment: string
     - title: string
@@ -895,7 +760,7 @@ const contractRId = contractRes.body.contract.rId
 - params:
   - address: 发布者地址
 - returns: Promise<Response\>
-  - Response.data
+  - Response.body
     - total: number
     - list: [Subscriber]
       - Subscriber.name: string
@@ -911,7 +776,7 @@ const contractRId = contractRes.body.contract.rId
 - params:
   - address: 发布者地址
 - returns: Promise<Response\>
-  - Response.data： empty
+  - Response.body： empty
 
 #### subscription.checkSubscription
 
@@ -920,7 +785,7 @@ const contractRId = contractRes.body.contract.rId
 > checkSubscription(subscriberAddress: string, publisherAddress: string): Promise
 
 - returns: Promise<Response\>
-  - Response.data
+  - Response.body
     - id: number
     - subscriberAddress: string
     - publisherAddress: string
@@ -936,7 +801,7 @@ const contractRId = contractRes.body.contract.rId
 - params:
   - address: 发布者地址
 - returns: Promise<Response\>
-  - Response.data
+  - Response.body
     - fieldCount: number
     - affectedRows: number
     - insertId: number
@@ -951,7 +816,7 @@ const contractRId = contractRes.body.contract.rId
 > getRecommendations(offset: number, limit: number): Promise
 
 - returns: Promise<Response\>
-  - Response.data: [Recommendation]
+  - Response.body: [Recommendation]
     - Recommendation.id: number
     - Recommendation.name: string
     - Recommendation.description: string
@@ -966,7 +831,7 @@ const contractRId = contractRes.body.contract.rId
 > getRecommendationJson(offset: number, limit: number): Promise
 
 - returns: Promise<Response\>
-  - Response.data
+  - Response.body
     - version: string # json feed 的版本号
     - user_comment: string
     - title: string
@@ -1019,7 +884,7 @@ dapp 使用经用户授权的 token，对数据进行签名（dapp代表用户�
   - token: 用户授权后，dapp 获取到代表用户身份的 token
   - host: pressone 服务器
 - returns: Promise<Response\>
-  - Response.data
+  - Response.body
     - hash: string
     - signature: string
 
