@@ -11,10 +11,9 @@ describe('Block', function () {
   ];
   it('get blocks by rIds without details', async function () {
     try {
-      const client = new PRS({ env: 'env', debug: true });
+      const client = new PRS({ env: 'env', debug: true, onApiSuccess: res => res.body });
       const res = await client.block.getByRIds(validBlocks);
-      res.status.should.equal(200);
-      res.body.forEach(data => {
+      res.forEach(data => {
         data.should.not.have.keys(detailProperties);
       });
     } catch (err) {
@@ -24,10 +23,9 @@ describe('Block', function () {
 
   it('get blocks by rIds with details', async function () {
     try {
-      const client = new PRS({ env: 'env', debug: true });
+      const client = new PRS({ env: 'env', debug: true, onApiSuccess: res => res.body });
       const res = await client.block.getByRIds(validBlocks, true);
-      res.status.should.equal(200);
-      res.body.forEach(data => {
+      res.forEach(data => {
         const keys = Object.keys(data);
         detailProperties.forEach(prop => {
           keys.includes(prop).should.to.equal(true);

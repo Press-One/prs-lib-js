@@ -5,6 +5,8 @@ declare module 'prs-lib' {
     address?: string;
     token?: string;
     privateKey?: string;
+    onApiError?(err: Error, res: Any): any | Promise<any>;
+    onApiSuccess(res: Any): any | Promise<any>;
   }
 
   interface PRSConfig extends PRSConfigOpts {
