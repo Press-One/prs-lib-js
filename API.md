@@ -11,6 +11,7 @@ prs-lib 暴露一个 PRS 类，PRS 主要对 REST API 进行了封装，方便�
 - options.address: 授权用户的 address.
 - options.token: 授权用户的 access token.
 - options.privateKey: 授权用户的 privateKey.
+- options.onApiError: api请求错误的 callback，设置之后，在遇到 api 报错时，不会 reject，而是返回 callback 的处理结果
 
 初始化完毕后，可以调用以下方法
 
