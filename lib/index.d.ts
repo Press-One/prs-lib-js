@@ -32,7 +32,7 @@ declare module 'prs-lib' {
     limit: number;
     [name: string]: any;
   }
-  
+
   interface Subscription {
     new(config: PRSConfig): Subscription;
     getSubscriptionJson(address: string, options: PageOpt):
@@ -72,7 +72,7 @@ declare module 'prs-lib' {
     signByStream(data: FileData, meta: object): Promise<any>;
     signByBuffer(data: FileData, meta: object): Promise<any>;
     getByRId(rId: string): Promise<any>;
-    getByMsghash(msghash: string): Promise<any>;
+    getByMsghash(msghash: string, options: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
     reward(rId: string, amount: number, comment: string): Promise<any>;
     getFilesByAddress(address: string, opt: PageOpt): Promise<any>;
   }
