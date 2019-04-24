@@ -83,7 +83,7 @@ describe('File', function () {
   it('reward', async function () {
     try {
       const buyClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
-      const res = await buyClient.file.reward(fileRId, 1, 'hello');
+      const res = await buyClient.file.reward(fileRId, 1, {comment: 'comment', memo: 'memo'});
       res.status.should.equal(200);
     } catch (err) {
       assert.fail(err);

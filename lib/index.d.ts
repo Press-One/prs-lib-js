@@ -73,7 +73,7 @@ declare module 'prs-lib' {
     signByBuffer(data: FileData, meta: object): Promise<any>;
     getByRId(rId: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
     getByMsghash(msghash: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
-    reward(rId: string, amount: number, comment: string): Promise<any>;
+    reward(rId: string, amount: number, options?: { memo?: string, comment?: string }): Promise<any>;
     getFilesByAddress(address: string, opt: PageOpt): Promise<any>;
   }
 
