@@ -5,6 +5,7 @@ declare module 'prs-lib' {
     address?: string;
     token?: string;
     privateKey?: string;
+    host?: string;
     onApiError?(err: Error, res: any): any | Promise<any>;
     onApiSuccess(res: any): any | Promise<any>;
   }
