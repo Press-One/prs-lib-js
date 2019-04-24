@@ -27,23 +27,25 @@ declare module 'prs-lib' {
     uploadAvatar(avatarBase64String: string): Promise<any>;
   }
 
+  interface PageOpt {
+    offset: number;
+    limit: number;
+    [name: string]: string | string[];
+  }
+  
   interface Subscription {
     new(config: PRSConfig): Subscription;
-    getSubscriptionJson(address: string, offset: number, limit: number):
+    getSubscriptionJson(address: string, options: PageOpt):
       Promise<any>;
-    getSubscriptions(address: string, offset: number, limit: number):
+    getSubscriptions(address: string, options: PageOpt):
       Promise<any>;
-    getSubscribers(address: string, offset: number, limit: number): Promise<any>;
-    getRecommendationJson(offset: number, limit: number): Promise<any>;
-    getRecommendations(offset: number, limit: number): Promise<any>;
+    getSubscribers(address: string, options: PageOpt): Promise<any>;
+    getRecommendationJson(options: PageOpt): Promise<any>;
+    getRecommendations(options: PageOpt): Promise<any>;
     subscribe(address: string): Promise<any>;
     unsubscribe(address: string): Promise<any>;
     checkSubscription(subscriberAddress: string, publisherAddress: string):
       Promise<any>;
-  }
-
-  interface PageOpt {
-    offset: number, limit: number
   }
 
   interface Finance {

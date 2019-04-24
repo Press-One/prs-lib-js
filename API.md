@@ -385,7 +385,9 @@ interface FileData {
 
 ```typescript
 interface PageOpt {
-  offset: number, limit: number
+  offset: number;
+  limit: number;
+  [name: string]: string | string[];
 }
 ```
 
@@ -725,7 +727,7 @@ interface PageOpt {
 
 #### subscription.getSubscriptions
 
-> getSubscriptions(address: string, offset: number, limit: number): Promise
+> getSubscriptions(address: string, options: PageOpt): Promise
 
 - params:
   - address: 订阅者地址
@@ -738,7 +740,7 @@ interface PageOpt {
 
 功能和上述类似，返回格式为 JSONFeed
 
-> getSubscriptionJson(address: string, offset: number, limit: number): Promise
+> getSubscriptionJson(address: string, options: PageOpt): Promise
 
 - params:
   - address: 订阅者地址
@@ -760,7 +762,7 @@ interface PageOpt {
 
 获取 address 的订阅者信息
 
-> getSubscribers(address: string, offset: number, limit: number): Promise;
+> getSubscribers(address: string, options: PageOpt): Promise;
 
 - params:
   - address: 发布者地址
