@@ -30,7 +30,7 @@ declare module 'prs-lib' {
   interface PageOpt {
     offset: number;
     limit: number;
-    [name: string]: string | string[];
+    [name: string]: any;
   }
   
   interface Subscription {
