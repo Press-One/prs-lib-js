@@ -71,8 +71,8 @@ declare module 'prs-lib' {
     signByFileReader(data: FileData, meta: object): Promise<any>;
     signByStream(data: FileData, meta: object): Promise<any>;
     signByBuffer(data: FileData, meta: object): Promise<any>;
-    getByRId(rId: string): Promise<any>;
-    getByMsghash(msghash: string, options: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
+    getByRId(rId: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
+    getByMsghash(msghash: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
     reward(rId: string, amount: number, comment: string): Promise<any>;
     getFilesByAddress(address: string, opt: PageOpt): Promise<any>;
   }
