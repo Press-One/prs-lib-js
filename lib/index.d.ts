@@ -119,7 +119,7 @@ declare module 'prs-lib' {
 
   interface Order {
     new(config: PRSConfig): Contract;
-    createOrder(contractRId: string, fileRId: string, licenseType: string):
+    createOrder(data: { contractRId: string, fileRId: string, licenseType: string }):
       Promise<any>;
     getOrdersByContractRId(contractRId: string, opt: PageOpt): Promise<any>;
     getPurchasedOrders(opt: PageOpt): Promise<any>;

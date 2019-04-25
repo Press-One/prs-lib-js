@@ -62,7 +62,9 @@ describe('Orders', function () {
 
   it('bind contract', async function () {
     try {
-      const res = await client.contract.bind(contractRId, fileRId, user.address);
+      const res = await client.contract.bind({
+        contractRId, fileRId, beneficiaryAddress: user.address
+      });
       res.status.should.equal(200);
     } catch (err) {
       assert.fail(err);
@@ -72,7 +74,9 @@ describe('Orders', function () {
   it('create order', async function () {
     try {
       const buyerClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
-      const res = await buyerClient.order.createOrder(contractRId, fileRId, 'usage1');
+      const res = await buyerClient.order.createOrder({
+        contractRId, fileRId, licenseType: 'usage1'
+      });
       res.status.should.equal(200);
     } catch (err) {
       assert.fail(err);
