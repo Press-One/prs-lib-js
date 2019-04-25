@@ -34,10 +34,14 @@ declare module 'prs-lib' {
 
   interface Subscription {
     new(config: PRSConfig): Subscription;
-    getSubscriptionJson(address: string, options?: PageOpt):
-      Promise<any>;
-    getSubscriptions(address: string, options?: PageOpt):
-      Promise<any>;
+    getSubscriptionJson(
+      address: string,
+      options?: { limit?: number, offset?: number, asCount?: boolean, isPersonal?: boolean | string, accountType?: string }
+    ): Promise<any>;
+    getSubscriptions(
+      address: string,
+      options?: { limit?: number, offset?: number, asCount?: boolean, isPersonal?: boolean | string, accountType?: string }
+    ): Promise<any>;
     getSubscribers(address: string, options?: PageOpt): Promise<any>;
     getRecommendationJson(options?: PageOpt): Promise<any>;
     getRecommendations(options?: PageOpt): Promise<any>;
