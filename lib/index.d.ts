@@ -106,7 +106,7 @@ declare module 'prs-lib' {
     update(id: string, draft: DraftContent): Promise<any>;
     delete(id: string): Promise<any>;
     getById(id: string): Promise<any>;
-    getDrafts(): Promise<any>;
+    getDrafts(options?: PageOpt): Promise<any>;
   }
 
   interface Contract {

@@ -54,7 +54,7 @@ describe('Draft', function () {
 
   it('get drafts', async function () {
     try {
-      const res = await client.draft.getDrafts();
+      const res = await client.draft.getDrafts({ limit: 1, offset: 0 });
       res.status.should.equal(200);
     } catch (err) {
       assert.fail(err);
