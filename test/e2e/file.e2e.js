@@ -1,3 +1,5 @@
+/* eslint no-undef: 0 */
+
 describe('Should call progress', function () {
   it('is a function', async function () {
     const prs = new PRS({
@@ -11,15 +13,15 @@ describe('Should call progress', function () {
     let formObj = {
       title: 'test title',
       file: fileInput.files[0]
-    }
+    };
 
-    function onUploadProgress(e) {
-      console.log(e)
+    function onUploadProgress (e) {
+      console.log(e);
       const percent = Math.round(100 * e.loaded / e.total);
-      console.log(`${e.type}: ${e.loaded}/${e.total} bytes(${percent}%) transferred`)
+      console.log(`${e.type}: ${e.loaded}/${e.total} bytes(${percent}%) transferred`);
     }
-    function onHashProgress(e) {
-      console.log(`hash ${e}`)
+    function onHashProgress (e) {
+      console.log(`hash ${e}`);
     }
     const res = await prs.file.signByFileReader(formObj, onUploadProgress, onHashProgress);
     chai.expect(res.status).to.equal(200);

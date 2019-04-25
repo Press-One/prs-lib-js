@@ -28,20 +28,19 @@ declare module 'prs-lib' {
   }
 
   interface PageOpt {
-    offset: number;
-    limit: number;
-    [name: string]: any;
+    offset?: string;
+    limit?: string;
   }
 
   interface Subscription {
     new(config: PRSConfig): Subscription;
-    getSubscriptionJson(address: string, options: PageOpt):
+    getSubscriptionJson(address: string, options?: PageOpt):
       Promise<any>;
-    getSubscriptions(address: string, options: PageOpt):
+    getSubscriptions(address: string, options?: PageOpt):
       Promise<any>;
-    getSubscribers(address: string, options: PageOpt): Promise<any>;
-    getRecommendationJson(options: PageOpt): Promise<any>;
-    getRecommendations(options: PageOpt): Promise<any>;
+    getSubscribers(address: string, options?: PageOpt): Promise<any>;
+    getRecommendationJson(options?: PageOpt): Promise<any>;
+    getRecommendations(options?: PageOpt): Promise<any>;
     subscribe(address: string): Promise<any>;
     unsubscribe(address: string): Promise<any>;
     checkSubscription(subscriberAddress: string, publisherAddress: string):
@@ -51,7 +50,7 @@ declare module 'prs-lib' {
   interface Finance {
     new(config: PRSConfig): Finance;
     getWallet(): Promise<any>;
-    getTransactions(opt: PageOpt): Promise<any>;
+    getTransactions(options?: PageOpt): Promise<any>;
     withdraw(amount: number， options?: { header: object }): Promise<any>;
     recharge(amount: number): Promise<any>;
   }
@@ -81,7 +80,7 @@ declare module 'prs-lib' {
     getByRId(rId: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
     getByMsghash(msghash: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
     reward(rId: string, amount: number, options?: { memo?: string, comment?: string, header?: object }): Promise<any>;
-    getFilesByAddress(address: string, opt: PageOpt): Promise<any>;
+    getFilesByAddress(address: string, options?: PageOpt): Promise<any>;
   }
 
   interface Block {
@@ -114,15 +113,15 @@ declare module 'prs-lib' {
     bind(data: { contractRId: string, fileRId: string, beneficiaryAddress: string }):
       Promise<any>;
     getByRId(rId: string): Promise<any>;
-    getContracts(opt: PageOpt): Promise<any>;
+    getContracts(options?: PageOpt): Promise<any>;
   }
 
   interface Order {
     new(config: PRSConfig): Contract;
     createOrder(data: { contractRId: string, fileRId: string, licenseType: string }):
       Promise<any>;
-    getOrdersByContractRId(contractRId: string, opt: PageOpt): Promise<any>;
-    getPurchasedOrders(opt: PageOpt): Promise<any>;
+    getOrdersByContractRId(contractRId: string, options?: PageOpt): Promise<any>;
+    getPurchasedOrders(options?: { offset?: number, limit?: number, type?: string }): Promise<any>;
     getOrderByRId(rId: string): Promise<any>;
   }
 
