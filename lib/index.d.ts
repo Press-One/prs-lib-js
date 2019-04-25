@@ -87,7 +87,7 @@ declare module 'prs-lib' {
     getByRId(rId: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
     getByMsghash(msghash: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
     reward(rId: string, amount: number, options?: { memo?: string, comment?: string, header?: object }): Promise<any>;
-    getFeeds(address: string, options?: PageOpt): Promise<any>;
+    getFeeds(address: string, options?: {limit?: number, offset?: number, [key:string]: any}): Promise<any>;
   }
 
   interface Block {
