@@ -71,7 +71,11 @@ describe('Contracts', function () {
 
   it('bind contract', async function () {
     try {
-      const res = await client.contract.bind(contractRId, fileRId, user.address);
+      const res = await client.contract.bind({
+        contractRId,
+        fileRId,
+        beneficiaryAddress: user.address
+      });
       res.status.should.equal(200);
     } catch (err) {
       assert.fail(err);

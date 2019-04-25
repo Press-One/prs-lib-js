@@ -111,7 +111,7 @@ declare module 'prs-lib' {
     new(config: PRSConfig): Contract;
     getTemplates(type: string): Promise<any>;
     create(code: string): Promise<any>;
-    bind(contractRId: string, fileRId: string, beneficiaryAddress: string):
+    bind(data: { contractRId: string, fileRId: string, beneficiaryAddress: string }):
       Promise<any>;
     getByRId(rId: string): Promise<any>;
     getContracts(opt: PageOpt): Promise<any>;
