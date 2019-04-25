@@ -1252,17 +1252,16 @@ function () {
           case 0:
             validator.assert(data, 'data cannot be null');
             validator.assert(data.file, 'file cannot be null');
-            validator.assert(data.filename, 'filename cannot be null');
             validator.assert(data.title, 'title cannot be null');
             validator.assert(this.config.privateKey || this.config.token, 'config.privateKey or config.token cannot be null');
             authOpts = {
               privateKey: this.config.privateKey,
               token: this.config.token
             };
-            _context.next = 8;
+            _context.next = 7;
             return signUtility.hashByFileReader(data.file, onHashProgress);
 
-          case 8:
+          case 7:
             fileHash = _context.sent;
             blockData = {
               file_hash: fileHash
@@ -1270,28 +1269,28 @@ function () {
             sign = null;
 
             if (!authOpts.privateKey) {
-              _context.next = 15;
+              _context.next = 14;
               break;
             }
 
             sign = utility.signBlockData(blockData, authOpts.privateKey);
-            _context.next = 20;
+            _context.next = 19;
             break;
 
-          case 15:
+          case 14:
             if (!authOpts.token) {
-              _context.next = 20;
+              _context.next = 19;
               break;
             }
 
-            _context.next = 18;
+            _context.next = 17;
             return signUtility.signByToken(blockData, authOpts.token, this.config.getHost());
 
-          case 18:
+          case 17:
             res = _context.sent;
             sign = res.body;
 
-          case 20:
+          case 19:
             address = utility.sigToAddress(sign.hash, sign.signature);
             fields = Object.assign({}, data, {
               address: address,
@@ -1300,8 +1299,7 @@ function () {
             });
             fileData = {
               field: 'file',
-              file: data.file,
-              filename: data.filename
+              file: data.file
             };
             return _context.abrupt("return", request({
               host: this.config.getHost(),
@@ -1315,7 +1313,7 @@ function () {
               onSuccess: this.config.onApiSuccess
             }));
 
-          case 24:
+          case 23:
           case "end":
             return _context.stop();
         }

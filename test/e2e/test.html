@@ -12,8 +12,14 @@
     <script>mocha.setup('bdd')</script>
     <script src="file.e2e.js"></script>
     <script>
-        mocha.checkLeaks();
-        mocha.run();
+        function runTest() {
+            mocha.checkLeaks();
+            mocha.run();
+        }
     </script>
+    <div class="form">
+        <input type="file" name="file" id="fileInput">
+        <button onclick="runTest()">submit</button>
+    </div>
 </body>
 </html> 
