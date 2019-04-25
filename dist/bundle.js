@@ -1300,7 +1300,9 @@ function () {
               fileds: fields,
               fileData: fileData,
               debug: this.config.debug,
-              onProgress: onUploadProgress,
+              onProgress: function onProgress(e) {
+                if (e.direction === 'upload') onUploadProgress(e);
+              },
               onError: this.config.onApiError,
               onSuccess: this.config.onApiSuccess
             }));

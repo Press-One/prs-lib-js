@@ -10,18 +10,15 @@ describe('Should call progress', function () {
     });
 
     const fileInput = document.getElementById('fileInput');
-    let formObj = {
+    const formObj = {
       title: 'test title',
       file: fileInput.files[0]
     };
-
     function onUploadProgress (e) {
-      console.log(e);
-      const percent = Math.round(100 * e.loaded / e.total);
-      console.log(`${e.type}: ${e.loaded}/${e.total} bytes(${percent}%) transferred`);
+      console.log(`${e.type}: ${e.loaded}/${e.total} bytes(${e.percent}%) transferred`);
     }
-    function onHashProgress (e) {
-      console.log(`hash ${e}`);
+    function onHashProgress (percent) {
+      console.log(`hash ${percent}`);
     }
     const res = await prs.file.signByFileReader(formObj, onUploadProgress, onHashProgress);
     chai.expect(res.status).to.equal(200);
