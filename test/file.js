@@ -92,7 +92,7 @@ describe('File', function () {
 
   it('get files', async function () {
     try {
-      const res = await client.file.getFilesByAddress(user.address, { offset: 0, limit: 10 });
+      const res = await client.file.getFeeds(user.address, { offset: 0, limit: 10 });
       res.status.should.equal(200);
     } catch (err) {
       assert.fail(err);

@@ -38,7 +38,7 @@ prs-lib 暴露一个 PRS 类，PRS 主要对 REST API 进行了封装，方便�
   - [signByBuffer](#filesignByBuffer)
   - [getByRId](#filegetByRId)
   - [getByMsghash](#filegetByMsghash)
-  - [getFilesByAddress](#filegetFilesByAddress)
+  - [getFeeds](#filegetFilesByAddress)
   - [reward](#filereward)
 - [`prs.finance`](#prsfinance)
   - [getWallet](#financegetWallet)
@@ -377,11 +377,11 @@ interface FileData {
 
 参数和返回结果同 `getByRId`
 
-#### file.getFilesByAddress
+#### file.getFeeds
 
 根据用户的 address 获取该用户所有的文件记录
 
-> getFilesByAddress(address: string, opt: PageOpt): Promise
+> getFeeds(address: string, opt: PageOpt): Promise
 
 ```typescript
 interface PageOpt {

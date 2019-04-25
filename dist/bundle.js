@@ -1655,7 +1655,7 @@ File.prototype.reward = function (rId, amount, options) {
 };
 /**
  *
- * @function getFilesByAddress
+ * @function getFeeds
  * @param {String} address
  * @param {Number} options.offset
  * @param {Number} options.limit
@@ -1664,7 +1664,7 @@ File.prototype.reward = function (rId, amount, options) {
  */
 
 
-File.prototype.getFilesByAddress = function (address, options) {
+File.prototype.getFeeds = function (address, options) {
   validator.assert(address, 'address cannot be null');
   return request({
     host: this.config.getHost(),
