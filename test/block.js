@@ -24,7 +24,7 @@ describe('Block', function () {
   it('get blocks by rIds with details', async function () {
     try {
       const client = new PRS({ env: 'env', debug: true, onApiSuccess: res => res.body });
-      const res = await client.block.getByRIds(validBlocks, true);
+      const res = await client.block.getByRIds(validBlocks, { withDetail: true });
       res.forEach(data => {
         const keys = Object.keys(data);
         detailProperties.forEach(prop => {
