@@ -28,8 +28,8 @@ declare module 'prs-lib' {
   }
 
   interface PageOpt {
-    offset?: string;
-    limit?: string;
+    offset?: number;
+    limit?: number;
   }
 
   interface Subscription {
@@ -51,7 +51,7 @@ declare module 'prs-lib' {
     new(config: PRSConfig): Finance;
     getWallet(): Promise<any>;
     getTransactions(options?: PageOpt): Promise<any>;
-    withdraw(amount: number， options?: { header: object }): Promise<any>;
+    withdraw(amount: number, options?: { header: object }): Promise<any>;
     recharge(amount: number): Promise<any>;
   }
 
@@ -74,7 +74,10 @@ declare module 'prs-lib' {
 
   interface File {
     new(config: PRSConfig): File;
-    signByFileReader(data: FileData, onUploadProgress(event: SuperAgentUploadEvent): any, onHashProgress(percent: number): any): Promise<any>;
+    signByFileReader(
+      data: FileData,
+      onUploadProgress: (event: SuperAgentUploadEvent) => any,
+      onHashProgress: (percent: number) => any): Promise<any>;
     signByStream(data: FileData, meta: object): Promise<any>;
     signByBuffer(data: FileData, meta: object): Promise<any>;
     getByRId(rId: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
