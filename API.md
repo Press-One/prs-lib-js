@@ -58,8 +58,8 @@ prs-lib 暴露一个 PRS 类，PRS 主要对 REST API 进行了封装，方便�
   - [getPurchasedOrders](#ordergetPurchasedOrders)
   - [getOrderByRId](#ordergetOrderByRId)
 - [`prs.keystore`](#prskeystore)
-  - [getByEmail](#keystoregetByEmail)
-  - [getByPhone](#keystoregetByPhone)
+  - [loginByEmail](#keystoregetByEmail)
+  - [loginByPhone](#keystoregetByPhone)
 - [`prs.user`](#prsuser)
   - [getByAddress](#usergetByAddress)
   - [editProfile](#usereditProfile)
@@ -672,18 +672,18 @@ interface PageOpt {
 
 实际为 pressone 的登录接口，可以根据邮箱登录，或是手机号和验证码（需要前端获取）登录，均返回 token 和 keystore 信息。
 
-#### keystore.getByEmail
+#### keystore.loginByEmail
 
-> getByEmail(email: string, password: string): Promise
+> loginByEmail(email: string, password: string): Promise
 
 - returns: Promise<Response\>
   - Response.body
     - token: string
     - keystore: sting # json string
 
-#### keystore.getByPhone
+#### keystore.loginByPhone
 
-> getByPhone(phone: string, code: string): Promise;
+> loginByPhone(phone: string, code: string): Promise;
 
 - returns: Promise<Response\>
   - Response.body

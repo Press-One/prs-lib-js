@@ -16,8 +16,8 @@ declare module 'prs-lib' {
 
   interface KeyStore {
     new(config: PRSConfig): KeyStore;
-    getByEmail(email: string, password: string): Promise<any>;
-    getByPhone(phone: string, code: string): Promise<any>;
+    loginByEmail(email: string, password: string): Promise<any>;
+    loginByPhone(phone: string, code: string): Promise<any>;
   }
 
   interface User {

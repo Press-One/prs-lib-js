@@ -20,22 +20,22 @@ function Block(config) {
  *
  * @function getByRIds
  * @param {Array} rIds
- * @param {Boolean} withDetail
+ * @param {Boolean} options.withDetail
  *
  * @returns {Promise}
  */
 
 
 Block.prototype.getByRIds = function (rIds) {
-  var withDetail = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
+    withDetail: false
+  };
   validator.assert(rIds, 'rIds cannot be null');
   return request({
     host: this.config.getHost(),
     method: 'get',
     path: "/blocks/".concat(rIds.join(',')),
-    query: withDetail ? {
-      withDetail: withDetail
-    } : {},
+    query: options,
     debug: this.config.debug,
     onError: this.config.onApiError,
     onSuccess: this.config.onApiSuccess
@@ -233,9 +233,9 @@ function () {
 /**
  *
  * @function bind
- * @param {String} contractRId
- * @param {String} fileRId
- * @param {String} beneficiaryAddress
+ * @param {String} data.contractRId
+ * @param {String} data.fileRId
+ * @param {String} data.beneficiaryAddress
  *
  * @returns {Promise}
  */
@@ -246,12 +246,14 @@ Contract.prototype.bind =
 function () {
   var _ref2 = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee2(contractRId, fileRId, beneficiaryAddress) {
-    var authOpts, blockData, sign, res, payload;
+  regeneratorRuntime.mark(function _callee2(data) {
+    var contractRId, fileRId, beneficiaryAddress, authOpts, blockData, sign, res, payload;
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
+            validator.assert(data, 'payload cannot be null');
+            contractRId = data.contractRId, fileRId = data.fileRId, beneficiaryAddress = data.beneficiaryAddress;
             validator.assert(contractRId, 'contractRId cannot be null');
             validator.assert(fileRId, 'fileRId cannot be null');
             validator.assert(beneficiaryAddress, 'beneficiaryAddress cannot be null');
@@ -268,28 +270,28 @@ function () {
             sign = null;
 
             if (!authOpts.privateKey) {
-              _context2.next = 11;
+              _context2.next = 13;
               break;
             }
 
             sign = utility.signBlockData(blockData, authOpts.privateKey);
-            _context2.next = 16;
+            _context2.next = 18;
             break;
 
-          case 11:
+          case 13:
             if (!authOpts.token) {
-              _context2.next = 16;
+              _context2.next = 18;
               break;
             }
 
-            _context2.next = 14;
+            _context2.next = 16;
             return signUtility.signByToken(blockData, authOpts.token, this.config.getHost());
 
-          case 14:
+          case 16:
             res = _context2.sent;
             sign = res.body;
 
-          case 16:
+          case 18:
             payload = {
               signature: sign.signature,
               fileRId: fileRId
@@ -307,7 +309,7 @@ function () {
               onSuccess: this.config.onApiSuccess
             }));
 
-          case 18:
+          case 20:
           case "end":
             return _context2.stop();
         }
@@ -315,7 +317,7 @@ function () {
     }, _callee2, this);
   }));
 
-  return function (_x2, _x3, _x4) {
+  return function (_x2) {
     return _ref2.apply(this, arguments);
   };
 }();
@@ -347,37 +349,24 @@ Contract.prototype.getByRId = function (rId) {
 /**
  *
  * @function getContracts
- * @param {Object} pageOpts
- * @param {Number} pageOpts.offset
- * @param {Number} pageOpts.limit
+ * @param {Number} options.offset
+ * @param {Number} options.limit
  *
  * @returns {Promise}
  */
 
 
-Contract.prototype.getContracts = function (pageOpts) {
+Contract.prototype.getContracts = function (options) {
   validator.assert(this.config.privateKey || this.config.token, 'config.privateKey or config.token cannot be null');
   var authOpts = {
     privateKey: this.config.privateKey,
     token: this.config.token
   };
-  var query = {};
-
-  if (pageOpts) {
-    if (pageOpts.offset != null) {
-      query['offset'] = pageOpts.offset;
-    }
-
-    if (pageOpts.limit != null) {
-      query['limit'] = pageOpts.limit;
-    }
-  }
-
   return request({
     host: this.config.getHost(),
     method: 'get',
     path: "/contracts",
-    query: query,
+    query: options,
     debug: this.config.debug,
     authOpts: authOpts,
     onError: this.config.onApiError,
@@ -1173,12 +1162,14 @@ Draft.prototype.getById = function (id) {
 /**
  *
  * @function getDrafts
+ * @param {Number} options.offset
+ * @param {Number} options.limit
  *
  * @returns {Promise}
  */
 
 
-Draft.prototype.getDrafts = function () {
+Draft.prototype.getDrafts = function (options) {
   validator.assert(this.config.privateKey || this.config.token, 'config.privateKey or config.token cannot be null');
   var authOpts = {
     privateKey: this.config.privateKey,
@@ -1188,6 +1179,7 @@ Draft.prototype.getDrafts = function () {
     host: this.config.getHost(),
     method: 'get',
     path: "/drafts",
+    query: options,
     debug: this.config.debug,
     authOpts: authOpts,
     onError: this.config.onApiError,
@@ -1629,6 +1621,7 @@ File.prototype.getByMsghash = function (msghash, options) {
  * @param {Number} amount
  * @param {String} options.memo
  * @param {String} options.comment <= 255
+ * @param {Object} options.header
  * @returns {Promise}
  */
 
@@ -1644,6 +1637,8 @@ File.prototype.reward = function (rId, amount, options) {
   var payload = Object.assign({}, {
     amount: amount
   }, options);
+  delete payload.header;
+  var header = options ? options.header : {};
   return request({
     host: this.config.getHost(),
     method: 'post',
@@ -1651,6 +1646,7 @@ File.prototype.reward = function (rId, amount, options) {
     data: {
       payload: payload
     },
+    headers: header,
     debug: this.config.debug,
     authOpts: authOpts,
     onError: this.config.onApiError,
@@ -1661,33 +1657,20 @@ File.prototype.reward = function (rId, amount, options) {
  *
  * @function getFilesByAddress
  * @param {String} address
- * @param {Object} pageOpts
- * @param {Number} pageOpts.offset
- * @param {Number} pageOpts.limit
+ * @param {Number} options.offset
+ * @param {Number} options.limit
  *
  * @returns {Promise}
  */
 
 
-File.prototype.getFilesByAddress = function (address, pageOpts) {
+File.prototype.getFilesByAddress = function (address, options) {
   validator.assert(address, 'address cannot be null');
-  var query = {};
-
-  if (pageOpts) {
-    if (pageOpts.offset != null) {
-      query['offset'] = pageOpts.offset;
-    }
-
-    if (pageOpts.limit != null) {
-      query['limit'] = pageOpts.limit;
-    }
-  }
-
   return request({
     host: this.config.getHost(),
     method: 'get',
     path: "/users/".concat(address, "/feed.json"),
-    query: query,
+    query: options,
     debug: this.config.debug,
     onError: this.config.onApiError,
     onSuccess: this.config.onApiSuccess
@@ -1752,37 +1735,24 @@ Finance.prototype.getWallet = function () {
 /**
  *
  * @function getTransactions
- * @param {Object} pageOpts
- * @param {Number} pageOpts.offset
- * @param {Number} pageOpts.limit
+ * @param {Number} options.offset
+ * @param {Number} options.limit
  *
  * @returns {Promise}
  */
 
 
-Finance.prototype.getTransactions = function (pageOpts) {
+Finance.prototype.getTransactions = function (options) {
   validator.assert(this.config.privateKey || this.config.token, 'config.privateKey or config.token cannot be null');
   var authOpts = {
     privateKey: this.config.privateKey,
     token: this.config.token
   };
-  var query = {};
-
-  if (pageOpts) {
-    if (pageOpts.offset != null) {
-      query['offset'] = pageOpts.offset;
-    }
-
-    if (pageOpts.limit != null) {
-      query['limit'] = pageOpts.limit;
-    }
-  }
-
   return request({
     host: this.config.getHost(),
     method: 'get',
     path: "/finance/transactions",
-    query: query,
+    query: options,
     authOpts: authOpts,
     debug: this.config.debug,
     onError: this.config.onApiError,
@@ -1793,12 +1763,13 @@ Finance.prototype.getTransactions = function (pageOpts) {
  *
  * @function withdraw
  * @param {Number} amount
+ * @param {Object} options.header
  *
  * @returns {Promise}
  */
 
 
-Finance.prototype.withdraw = function (amount) {
+Finance.prototype.withdraw = function (amount, options) {
   validator.assert(this.config.privateKey || this.config.token, 'config.privateKey or config.token cannot be null');
   var authOpts = {
     privateKey: this.config.privateKey,
@@ -1810,6 +1781,7 @@ Finance.prototype.withdraw = function (amount) {
   return request({
     host: this.config.getHost(),
     method: 'post',
+    headers: options ? options.header : {},
     path: "finance/withdraw",
     data: {
       payload: payload
@@ -1940,7 +1912,7 @@ function Keystore(config) {
 }
 /**
  *
- * @function getByEmail
+ * @function loginByEmail
  * @param {String} email
  * @param {String} password
  *
@@ -1948,7 +1920,7 @@ function Keystore(config) {
  */
 
 
-Keystore.prototype.getByEmail = function (email, password) {
+Keystore.prototype.loginByEmail = function (email, password) {
   var payload = {
     email: email,
     passwordHash: hashByPassword(email, password)
@@ -1970,7 +1942,7 @@ Keystore.prototype.getByEmail = function (email, password) {
 };
 /**
  *
- * @function getByPhone
+ * @function loginByPhone
  * @param {String} phone
  * @param {String} code
  *
@@ -1978,7 +1950,7 @@ Keystore.prototype.getByEmail = function (email, password) {
  */
 
 
-Keystore.prototype.getByPhone = function (phone, code) {
+Keystore.prototype.loginByPhone = function (phone, code) {
   var payload = {
     phone: phone,
     code: code
@@ -2020,15 +1992,19 @@ function Order(config) {
 /**
  *
  * @function createOrder
- * @param {String} contractRId
- * @param {String} fileRId
- * @param {String} licenseType
+ * @param {String} data.contractRId
+ * @param {String} data.fileRId
+ * @param {String} data.licenseType
  *
  * @returns {Promise}
  */
 
 
-Order.prototype.createOrder = function (contractRId, fileRId, licenseType) {
+Order.prototype.createOrder = function (data) {
+  validator.assert(data, 'contractRId cannot be null');
+  var contractRId = data.contractRId,
+      fileRId = data.fileRId,
+      licenseType = data.licenseType;
   validator.assert(contractRId, 'contractRId cannot be null');
   validator.assert(fileRId, 'fileRId cannot be null');
   validator.assert(licenseType, 'licenseType cannot be null');
@@ -2037,17 +2013,12 @@ Order.prototype.createOrder = function (contractRId, fileRId, licenseType) {
     privateKey: this.config.privateKey,
     token: this.config.token
   };
-  var payload = {
-    contractRId: contractRId,
-    fileRId: fileRId,
-    licenseType: licenseType
-  };
   return request({
     host: this.config.getHost(),
     method: 'post',
     path: "/orders",
     data: {
-      payload: payload
+      payload: data
     },
     debug: this.config.debug,
     authOpts: authOpts,
@@ -2059,37 +2030,24 @@ Order.prototype.createOrder = function (contractRId, fileRId, licenseType) {
  *
  * @function getOrdersByContractRId
  * @param {String} contractRId
- * @param {Object} pageOpts
- * @param {Number} pageOpts.offset
- * @param {Number} pageOpts.limit
+ * @param {Number} options.offset
+ * @param {Number} options.limit
  *
  * @returns {Promise}
  */
 
 
-Order.prototype.getOrdersByContractRId = function (contractRId, pageOpts) {
+Order.prototype.getOrdersByContractRId = function (contractRId, options) {
   validator.assert(contractRId, 'contractRId cannot be null');
   var authOpts = {
     privateKey: this.config.privateKey,
     token: this.config.token
   };
-  var query = {};
-
-  if (pageOpts) {
-    if (pageOpts.offset != null) {
-      query['offset'] = pageOpts.offset;
-    }
-
-    if (pageOpts.limit != null) {
-      query['limit'] = pageOpts.limit;
-    }
-  }
-
   return request({
     host: this.config.getHost(),
     method: 'get',
     path: "/contracts/".concat(contractRId, "/orders"),
-    query: query,
+    query: options,
     debug: this.config.debug,
     authOpts: authOpts,
     onError: this.config.onApiError,
@@ -2099,16 +2057,15 @@ Order.prototype.getOrdersByContractRId = function (contractRId, pageOpts) {
 /**
  *
  * @function getPurchasedOrders
- * @param {Object} pageOpts
- * @param {Number} pageOpts.offset
- * @param {Number} pageOpts.limit
- * @param {String} pageOpts.type optional ['image' | 'text']
+ * @param {Number} options.offset
+ * @param {Number} options.limit
+ * @param {String} options.type optional ['image' | 'text']
  *
  * @returns {Promise}
  */
 
 
-Order.prototype.getPurchasedOrders = function (pageOpts) {
+Order.prototype.getPurchasedOrders = function (options) {
   validator.assert(this.config.privateKey || this.config.token, 'config.privateKey or config.token cannot be null');
   var authOpts = {
     privateKey: this.config.privateKey,
@@ -2118,7 +2075,7 @@ Order.prototype.getPurchasedOrders = function (pageOpts) {
     host: this.config.getHost(),
     method: 'get',
     path: "/orders",
-    query: pageOpts,
+    query: options,
     debug: this.config.debug,
     authOpts: authOpts,
     onError: this.config.onApiError,
@@ -2625,6 +2582,9 @@ function Subscription(config) {
  * @param {String} address
  * @param {Number} options.offset
  * @param {Number} options.limit
+ * @param {Boolean} options.asCount
+ * @param {Boolean} options.isPersonal
+ * @param {String} options.accountType
  *
  * @returns {Promise}
  */
@@ -2650,6 +2610,9 @@ Subscription.prototype.getSubscriptionJson = function (address, options) {
  * @param {String} address
  * @param {Number} options.offset
  * @param {Number} options.limit
+ * @param {Boolean} options.asCount
+ * @param {Boolean} options.isPersonal
+ * @param {String} options.accountType
  *
  * @returns {Promise}
  */
