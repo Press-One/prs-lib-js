@@ -153,6 +153,7 @@ declare module 'prs-lib' {
       Promise<any>;
     authenticate(appAddress: string, authAddress: string): Promise<any>;
     deauthenticate(appAddress: string, authAddress: string): Promise<any>;
+    listAuthorized(): Promise<any>;
   }
 
   interface AuthHeader {

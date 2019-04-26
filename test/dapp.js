@@ -153,4 +153,15 @@ describe('DApp', function () {
       assert.fail(err);
     }
   });
+
+  it('listAuthorized', async function () {
+    try {
+      const prs = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
+      const authorizedApps = await prs.dapp.listAuthorized();
+      authorizedApps.status.should.equal(200);
+      authorizedApps.body.should.have.own.property('list');
+    } catch (err) {
+      assert.fail(err);
+    }
+  });
 });
