@@ -80,8 +80,8 @@ declare module 'prs-lib' {
     new(config: PRSConfig): File;
     signByFileReader(
       data: FileData,
-      onUploadProgress: (event: SuperAgentUploadEvent) => any,
-      onHashProgress: (percent: number) => any): Promise<any>;
+      onUploadProgress?: (event: SuperAgentUploadEvent) => any,
+      onHashProgress?: (percent: number) => any): Promise<any>;
     signByStream(data: FileData, meta: object): Promise<any>;
     signByBuffer(data: FileData, meta: object): Promise<any>;
     getByRId(rId: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
