@@ -560,12 +560,13 @@ DApp.prototype["delete"] = function (address) {
  *
  * @function getByAddress
  * @param {String} address
+ * @param {Boolean} options.withDeveloper
  *
  * @returns {Promise}
  */
 
 
-DApp.prototype.getByAddress = function (address) {
+DApp.prototype.getByAddress = function (address, options) {
   validator.assert(address, 'address cannot be null');
   var authOpts = {
     privateKey: this.config.privateKey,
@@ -575,6 +576,7 @@ DApp.prototype.getByAddress = function (address) {
     host: this.config.getHost(),
     method: 'get',
     path: "/apps/".concat(address),
+    query: options,
     debug: this.config.debug,
     authOpts: authOpts,
     onError: this.config.onApiError,
@@ -974,6 +976,44 @@ function () {
     return _ref4.apply(this, arguments);
   };
 }();
+/**
+ * @function listAuthorized
+ *
+ * @returns {Promise}
+ */
+
+
+DApp.prototype.listAuthorized =
+/*#__PURE__*/
+_asyncToGenerator(
+/*#__PURE__*/
+regeneratorRuntime.mark(function _callee5() {
+  var authOpts;
+  return regeneratorRuntime.wrap(function _callee5$(_context5) {
+    while (1) {
+      switch (_context5.prev = _context5.next) {
+        case 0:
+          authOpts = {
+            privateKey: this.config.privateKey,
+            token: this.config.token
+          };
+          return _context5.abrupt("return", request({
+            host: this.config.getHost(),
+            method: 'get',
+            path: "/apps/authorized",
+            debug: this.config.debug,
+            authOpts: authOpts,
+            onError: this.config.onApiError,
+            onSuccess: this.config.onApiSuccess
+          }));
+
+        case 2:
+        case "end":
+          return _context5.stop();
+      }
+    }
+  }, _callee5, this);
+}));
 
 },{"./request":11,"./signUtility":12,"./validator":15,"prs-utility":490}],5:[function(require,module,exports){
 'use strict';
@@ -1218,7 +1258,6 @@ function File(config) {
  * @function signByFileReader
  * @param {Object} data
  * @param {FileReader} data.file
- * @param {String} data.filename
  * @param {String} data.title
  * @param {String} data.source
  * @param {String} data.originUrl
@@ -1244,16 +1283,17 @@ function () {
           case 0:
             validator.assert(data, 'data cannot be null');
             validator.assert(data.file, 'file cannot be null');
+            validator.assert(data.file.type === 'text/markdown' || data.file.type.startsWith('image'), "file type(".concat(data.file.type, ") is not supported"));
             validator.assert(data.title, 'title cannot be null');
             validator.assert(this.config.privateKey || this.config.token, 'config.privateKey or config.token cannot be null');
             authOpts = {
               privateKey: this.config.privateKey,
               token: this.config.token
             };
-            _context.next = 7;
+            _context.next = 8;
             return signUtility.hashByFileReader(data.file, onHashProgress);
 
-          case 7:
+          case 8:
             fileHash = _context.sent;
             blockData = {
               file_hash: fileHash
@@ -1261,28 +1301,28 @@ function () {
             sign = null;
 
             if (!authOpts.privateKey) {
-              _context.next = 14;
+              _context.next = 15;
               break;
             }
 
             sign = utility.signBlockData(blockData, authOpts.privateKey);
-            _context.next = 19;
+            _context.next = 20;
             break;
 
-          case 14:
+          case 15:
             if (!authOpts.token) {
-              _context.next = 19;
+              _context.next = 20;
               break;
             }
 
-            _context.next = 17;
+            _context.next = 18;
             return signUtility.signByToken(blockData, authOpts.token, this.config.getHost());
 
-          case 17:
+          case 18:
             res = _context.sent;
             sign = res.body;
 
-          case 19:
+          case 20:
             address = utility.sigToAddress(sign.hash, sign.signature);
             fields = Object.assign({}, data, {
               address: address,
@@ -1291,8 +1331,10 @@ function () {
             });
             fileData = {
               field: 'file',
-              file: data.file
+              file: data.file,
+              filename: data.file.type.startsWith('image') ? fileHash : "".concat(fileHash, ".md")
             };
+            console.log(fileData);
             return _context.abrupt("return", request({
               host: this.config.getHost(),
               method: 'post',
@@ -1307,7 +1349,7 @@ function () {
               onSuccess: this.config.onApiSuccess
             }));
 
-          case 23:
+          case 25:
           case "end":
             return _context.stop();
         }
