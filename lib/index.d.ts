@@ -87,7 +87,7 @@ declare module 'prs-lib' {
     getByRId(rId: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
     getByMsghash(msghash: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
     reward(rId: string, amount: number, options?: { memo?: string, comment?: string, header?: object }): Promise<any>;
-    getFeeds(address: string, options?: {limit?: number, offset?: number, [key:string]: any}): Promise<any>;
+    getFeeds(address: string, options?: { limit?: number, offset?: number, [key: string]: any }): Promise<any>;
   }
 
   interface Block {
@@ -145,7 +145,7 @@ declare module 'prs-lib' {
     create(dapp: DappContent): Promise<any>;
     update(address: string, dapp: DappContent): Promise<any>;
     delete(address: string): Promise<any>;
-    getByAddress(address: string): Promise<any>;
+    getByAddress(address: string, options?: { withDeveloper: boolean }): Promise<any>;
     getDApps(): Promise<any>;
     getAuthorizeUrl(appAddress: string): Promise<any>;
     webAuthorize(appAddress: string): Promise<any>;
