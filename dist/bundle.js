@@ -1275,12 +1275,24 @@ File.prototype.signByFileReader =
 function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee(data, onUploadProgress, onHashProgress) {
-    var authOpts, fileHash, blockData, sign, res, address, fields, fileData;
+  regeneratorRuntime.mark(function _callee(data) {
+    var onUploadProgress,
+        onHashProgress,
+        authOpts,
+        fileHash,
+        blockData,
+        sign,
+        res,
+        address,
+        fields,
+        fileData,
+        _args = arguments;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            onUploadProgress = _args.length > 1 && _args[1] !== undefined ? _args[1] : noop;
+            onHashProgress = _args.length > 2 && _args[2] !== undefined ? _args[2] : noop;
             validator.assert(data, 'data cannot be null');
             validator.assert(data.file, 'file cannot be null');
             validator.assert(data.file.type === 'text/markdown' || data.file.type.startsWith('image'), "file type(".concat(data.file.type, ") is not supported"));
@@ -1290,10 +1302,10 @@ function () {
               privateKey: this.config.privateKey,
               token: this.config.token
             };
-            _context.next = 8;
+            _context.next = 10;
             return signUtility.hashByFileReader(data.file, onHashProgress);
 
-          case 8:
+          case 10:
             fileHash = _context.sent;
             blockData = {
               file_hash: fileHash
@@ -1301,28 +1313,28 @@ function () {
             sign = null;
 
             if (!authOpts.privateKey) {
-              _context.next = 15;
+              _context.next = 17;
               break;
             }
 
             sign = utility.signBlockData(blockData, authOpts.privateKey);
-            _context.next = 20;
+            _context.next = 22;
             break;
 
-          case 15:
+          case 17:
             if (!authOpts.token) {
-              _context.next = 20;
+              _context.next = 22;
               break;
             }
 
-            _context.next = 18;
+            _context.next = 20;
             return signUtility.signByToken(blockData, authOpts.token, this.config.getHost());
 
-          case 18:
+          case 20:
             res = _context.sent;
             sign = res.body;
 
-          case 20:
+          case 22:
             address = utility.sigToAddress(sign.hash, sign.signature);
             fields = Object.assign({}, data, {
               address: address,
@@ -1349,7 +1361,7 @@ function () {
               onSuccess: this.config.onApiSuccess
             }));
 
-          case 25:
+          case 27:
           case "end":
             return _context.stop();
         }
@@ -1357,7 +1369,7 @@ function () {
     }, _callee, this);
   }));
 
-  return function (_x, _x2, _x3) {
+  return function (_x) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -1482,7 +1494,7 @@ function () {
     }, _callee2, this);
   }));
 
-  return function (_x4, _x5) {
+  return function (_x2, _x3) {
     return _ref2.apply(this, arguments);
   };
 }();
@@ -1600,7 +1612,7 @@ function () {
     }, _callee3, this);
   }));
 
-  return function (_x6, _x7) {
+  return function (_x4, _x5) {
     return _ref4.apply(this, arguments);
   };
 }();
@@ -1733,6 +1745,8 @@ function omitSignData(data) {
 }
 
 ;
+
+function noop() {}
 
 },{"./request":11,"./signUtility":12,"./validator":15,"prs-utility":490}],7:[function(require,module,exports){
 'use strict';
@@ -27249,7 +27263,7 @@ module.exports={
   "_args": [
     [
       "elliptic@6.4.1",
-      "/home/chux0519/workspace/pressone/prs-lib-js"
+      "/Users/xuyongsheng/workspace/pressone/prs-lib-js"
     ]
   ],
   "_from": "elliptic@6.4.1",
@@ -27276,7 +27290,7 @@ module.exports={
   ],
   "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.4.1.tgz",
   "_spec": "6.4.1",
-  "_where": "/home/chux0519/workspace/pressone/prs-lib-js",
+  "_where": "/Users/xuyongsheng/workspace/pressone/prs-lib-js",
   "author": {
     "name": "Fedor Indutny",
     "email": "fedor@indutny.com"

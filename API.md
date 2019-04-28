@@ -6,12 +6,16 @@ prs-lib 暴露一个 PRS 类，PRS 主要对 REST API 进行了封装，方便�
 
 > const prs = new PRS(options)
 
-- options.env: 设置开发环境。正式环境为'prod', 开发环境为'dev'.
-- options.debug: 开启调试日志，开启后 SDK 会把网络请求、错误消息等信息输出到IDE的日志窗口。
-- options.address: 授权用户的 address.
-- options.token: 授权用户的 access token.
-- options.privateKey: 授权用户的 privateKey.
-- options.onApiError: api请求错误的 callback，设置之后，在遇到 api 报错时，不会 reject，而是返回 callback 的处理结果
+- options.env: string, 设置开发环境。正式环境为'prod', 开发环境为'dev'.
+- options.debug: boolean, 开启调试日志，开启后 SDK 会把网络请求、错误消息等信息输出到IDE的日志窗口.
+- options.address: string, 授权用户的 address.
+- options.token: string, 授权用户的 access token.
+- options.privateKey: string, 授权用户的 privateKey.
+- options.host: string, 可选项，指定 api 服务器，多用于调试
+- options.onApiError: (error, response) => any, 可选项，api请求错误的 callback，设置之后，在遇到 api 报错时，不会 reject，而是返回 callback 的处理结果.
+- options.onApiSuccess: (response) => any, 可选项，api请求成功的 callback，设置之后，在遇到 api 成功时，会返回处理后的结果.
+
+注：关于 token 和 privateKey，dapp 代表用户时，采用 token（因为拿不到用户的 privateKey）。而用户或是 dapp 代表自己身份时（能拿到 privateKey 时），可以使用 privateKey；区别在于，在签名时，使用 token 的身份会在服务端进行签名，而有 privateKey 的身份可以在本地签名。关于  onApiError 和 onApiSuccess，默认情况下，返回结果是 superagent 的相应结果，api 服务器的结果在 res.body 中，为了避免每次请求完获取 res.body ，可以设置 onApiSuccess：res => res.body。
 
 初始化完毕后，可以调用以下方法
 
@@ -32,6 +36,7 @@ prs-lib 暴露一个 PRS 类，PRS 主要对 REST API 进行了封装，方便�
   - [webAuthorize](#dappwebAuthorize)
   - [authByCode](#dappauthByCode)
   - [deauthenticate](#dappdeauthenticate)
+  - [listAuthorized](#listAuthorized)
 - [`prs.file`](#prsfile)
   - [signByFileReader](#filesignByFileReader)
   - [signByStream](#filesignByStream)
@@ -290,6 +295,15 @@ dapp 通过 code 接受授权，获取代表用户身份的 token
       - status: 'CANCELED'
       - other meta data
 
+#### dapp.listAuthorized
+
+获取所有已授权的 dapp 信息
+
+> listAuthorized(): Promise;
+
+- returns: Promise<Response\>
+  - Response.body
+
 ### prs.file
 
 `prs.file` 封装了对文件的签名、获取、打赏等功能
@@ -298,7 +312,14 @@ dapp 通过 code 接受授权，获取代表用户身份的 token
 
 限定在浏览器中使用，使用 filereader 进行签名
 
-> signByFileReader(data: FileData, meta: object): Promise
+>     signByFileReader(
+>     data: FileData,
+>     onUploadProgress?: (event: SuperAgentUploadEvent) => any,
+>     onHashProgress?: (percent: number) => any): Promise;
+
+onUploadProgress 为上传的进度事件，event.percent 可以访问到事件触发时上传的进度。 onHashProgress 为 hash 进度。
+
+签名流程为，FileReader 读取数据并且算出文件的 hash 值，完成之后进行上传上链。
 
 ```typescript
 interface FileData {
@@ -381,15 +402,7 @@ interface FileData {
 
 根据用户的 address 获取该用户所有的文件记录
 
-> getFeeds(address: string, opt: PageOpt): Promise
-
-```typescript
-interface PageOpt {
-  offset: number;
-  limit: number;
-  [name: string]: string | string[];
-}
-```
+> getFeeds(address: string, options?: { limit?: number, offset?: number, [key: string]: any }): Promise;
 
 - params:
   - address: string
@@ -413,12 +426,14 @@ interface PageOpt {
 
 打赏（注意这里是 PRS 站内行为，不上链）
 
-> reward(rId: string, amount: number, comment: string): Promise
+> reward(rId: string, amount: number, options?: { memo?: string, comment?: string, header?: object }): Promise;
 
 - params:
-  - forFileRId: string
-  - amount: number
-  - comment: string
+  - rId: string，被打赏的文件 id
+  - amount: number，数额
+  - memo: string，可选
+  - comment: string, 可选
+  - header: object, 打赏金额超过一定量时，需要提供额外的 header 进行身份的二次确认
 - returns: Promise<Response\>
   - Response.body
     - id: number
@@ -464,6 +479,13 @@ interface PageOpt {
 获取交易历史记录
 
 > getTransactions(opt: PageOpt): Promise
+
+```typescript
+interface PageOpt {
+  offset?: number;
+  limit?: number;
+}
+```
 
 - params:
   - offset: number
@@ -515,7 +537,7 @@ interface PageOpt {
 
 #### block.getByRIds
 
-> getByRIds(rIds: [string], withDetail: boolean): Promise
+> getByRIds(rIds: [string], options?: { withDetail: boolean }): Promise;
 
 - params:
   - ids: [string]
@@ -650,7 +672,7 @@ interface PageOpt {
 
 获取当前身份已付款的订单情况
 
-> getPurchasedOrders(opt: PageOpt): Promise;
+> getPurchasedOrders(options?: { offset?: number, limit?: number, type?: string }): Promise;
 
 - params
   - opt.limit: number
@@ -727,7 +749,12 @@ interface PageOpt {
 
 #### subscription.getSubscriptions
 
-> getSubscriptions(address: string, options: PageOpt): Promise
+```javascript
+getSubscriptions(
+      address: string,
+      options?: { limit?: number, offset?: number, asCount?: boolean, isPersonal?: boolean | string, accountType?: string }
+    ): Promise<any>;
+```
 
 - params:
   - address: 订阅者地址
@@ -740,7 +767,12 @@ interface PageOpt {
 
 功能和上述类似，返回格式为 JSONFeed
 
-> getSubscriptionJson(address: string, options: PageOpt): Promise
+```javascript
+getSubscriptionJson(
+      address: string,
+      options?: { limit?: number, offset?: number, asCount?: boolean, isPersonal?: boolean | string, accountType?: string }
+    ): Promise<any>;
+```
 
 - params:
   - address: 订阅者地址

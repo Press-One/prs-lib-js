@@ -7,7 +7,7 @@ declare module 'prs-lib' {
     privateKey?: string;
     host?: string;
     onApiError?(err: Error, res: any): any | Promise<any>;
-    onApiSuccess(res: any): any | Promise<any>;
+    onApiSuccess?(res: any): any | Promise<any>;
   }
 
   interface PRSConfig extends PRSConfigOpts {
