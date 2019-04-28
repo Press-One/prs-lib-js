@@ -54,13 +54,6 @@ const client = new PRS({
 });
 ```
 
-- env: 设置开发环境。正式环境为'prod', 开发环境为'dev'.
-- debug: 开启调试日志，开启后 SDK 会把网络请求、错误消息等信息输出到IDE的日志窗口。
-- address: 授权用户的 address.
-- token: 授权用户的 access token.
-- privateKey: 授权用户的 privateKey.
-- onApiError: api请求错误的 callback，设置之后，在遇到 api 报错时，不会 reject，而是返回 callback 的处理结果
-
 ### 示例代码
 
 以下代码根据块的 id 从链上对块内容进行获取
