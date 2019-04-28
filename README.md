@@ -45,7 +45,13 @@ npm install prs-lib --save
 ```javascript
 const PRS = require('prs-lib');
 // 初始化 client。
-const client = new PRS({ env: 'env', debug: true, address: authAddress, token: token });
+const client = new PRS({
+  env: 'env', debug: true, address: authAddress, token: token
+  onApiError: function(err, res) {
+    console.log(err, res)
+    return true
+  }
+});
 ```
 
 - env: 设置开发环境。正式环境为'prod', 开发环境为'dev'.
@@ -53,6 +59,7 @@ const client = new PRS({ env: 'env', debug: true, address: authAddress, token: t
 - address: 授权用户的 address.
 - token: 授权用户的 access token.
 - privateKey: 授权用户的 privateKey.
+- onApiError: api请求错误的 callback，设置之后，在遇到 api 报错时，不会 reject，而是返回 callback 的处理结果
 
 ### 示例代码
 
@@ -62,7 +69,7 @@ const client = new PRS({ env: 'env', debug: true, address: authAddress, token: t
 const PRS = require('prs-lib');
 
 const client = new PRS({ env: 'env', debug: true });
-const res = client.block.getByRIds(['ba03bd584d69b89615ce8db22b4c593342a5ec09b343a7859044a8e4d389c4c2', '65163724a98d29506b1031dc68fa62fb5a7a11fe631fb723a723b2a19e9bb65c'])
+const res = await client.block.getByRIds(['ba03bd584d69b89615ce8db22b4c593342a5ec09b343a7859044a8e4d389c4c2', '65163724a98d29506b1031dc68fa62fb5a7a11fe631fb723a723b2a19e9bb65c'])
 console.log(res.body);
 ```
 

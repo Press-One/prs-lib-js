@@ -15,7 +15,7 @@ const client = new PRS({
 describe('Subscription', function () {
   it('get subscription json', async function () {
     try {
-      const res = await client.subscription.getSubscriptionJson(user.address, 0, 10);
+      const res = await client.subscription.getSubscriptionJson(user.address, { offset: 0, limit: 10 });
       should.exist(res.text);
     } catch (err) {
       assert.fail(err);
@@ -24,7 +24,7 @@ describe('Subscription', function () {
 
   it('get subscriptions', async function () {
     try {
-      const res = await client.subscription.getSubscriptions(user.address, 0, 10);
+      const res = await client.subscription.getSubscriptions(user.address, { offset: 0, limit: 10 });
       should.exist(res.body);
     } catch (err) {
       assert.fail(err);
@@ -33,7 +33,7 @@ describe('Subscription', function () {
 
   it('get subscripbers', async function () {
     try {
-      const res = await client.subscription.getSubscribers(user.address, 0, 10);
+      const res = await client.subscription.getSubscribers(user.address, { offset: 0, limit: 10 });
       should.exist(res.body);
     } catch (err) {
       assert.fail(err);
@@ -42,7 +42,7 @@ describe('Subscription', function () {
 
   it('get recommendation json', async function () {
     try {
-      const res = await client.subscription.getRecommendationJson(0, 10);
+      const res = await client.subscription.getRecommendationJson({ offset: 0, limit: 10 });
       should.exist(res.text);
     } catch (err) {
       assert.fail(err);
@@ -51,7 +51,7 @@ describe('Subscription', function () {
 
   it('get recommendations', async function () {
     try {
-      const res = await client.subscription.getRecommendations(0, 10);
+      const res = await client.subscription.getRecommendations({ offset: 0, limit: 10 });
       should.exist(res.body);
     } catch (err) {
       assert.fail(err);

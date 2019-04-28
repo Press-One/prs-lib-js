@@ -9,7 +9,7 @@ const client = new PRS({ env: 'env', debug: true });
 describe('Keystore', function () {
   it('get keystore', async function () {
     try {
-      const res = await client.keystore.getByEmail(user.email, user.password);
+      const res = await client.keystore.loginByEmail(user.email, user.password);
       const keystore = res.body.keystore;
       should.exist(keystore);
     } catch (err) {

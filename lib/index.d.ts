@@ -5,6 +5,9 @@ declare module 'prs-lib' {
     address?: string;
     token?: string;
     privateKey?: string;
+    host?: string;
+    onApiError?(err: Error, res: any): any | Promise<any>;
+    onApiSuccess?(res: any): any | Promise<any>;
   }
 
   interface PRSConfig extends PRSConfigOpts {
@@ -13,8 +16,8 @@ declare module 'prs-lib' {
 
   interface KeyStore {
     new(config: PRSConfig): KeyStore;
-    getByEmail(email: string, password: string): Promise<any>;
-    getByPhone(phone: string, code: string): Promise<any>;
+    loginByEmail(email: string, password: string): Promise<any>;
+    loginByPhone(phone: string, code: string): Promise<any>;
   }
 
   interface User {
@@ -24,30 +27,35 @@ declare module 'prs-lib' {
     uploadAvatar(avatarBase64String: string): Promise<any>;
   }
 
+  interface PageOpt {
+    offset?: number;
+    limit?: number;
+  }
+
   interface Subscription {
     new(config: PRSConfig): Subscription;
-    getSubscriptionJson(address: string, offset: number, limit: number):
-      Promise<any>;
-    getSubscriptions(address: string, offset: number, limit: number):
-      Promise<any>;
-    getSubscribers(address: string, offset: number, limit: number): Promise<any>;
-    getRecommendationJson(offset: number, limit: number): Promise<any>;
-    getRecommendations(offset: number, limit: number): Promise<any>;
+    getSubscriptionJson(
+      address: string,
+      options?: { limit?: number, offset?: number, asCount?: boolean, isPersonal?: boolean | string, accountType?: string }
+    ): Promise<any>;
+    getSubscriptions(
+      address: string,
+      options?: { limit?: number, offset?: number, asCount?: boolean, isPersonal?: boolean | string, accountType?: string }
+    ): Promise<any>;
+    getSubscribers(address: string, options?: PageOpt): Promise<any>;
+    getRecommendationJson(options?: PageOpt): Promise<any>;
+    getRecommendations(options?: PageOpt): Promise<any>;
     subscribe(address: string): Promise<any>;
     unsubscribe(address: string): Promise<any>;
     checkSubscription(subscriberAddress: string, publisherAddress: string):
       Promise<any>;
   }
 
-  interface PageOpt {
-    offset: number, limit: number
-  }
-
   interface Finance {
     new(config: PRSConfig): Finance;
     getWallet(): Promise<any>;
-    getTransactions(opt: PageOpt): Promise<any>;
-    withdraw(amount: number): Promise<any>;
+    getTransactions(options?: PageOpt): Promise<any>;
+    withdraw(amount: number, options?: { header: object }): Promise<any>;
     recharge(amount: number): Promise<any>;
   }
 
@@ -61,20 +69,30 @@ declare module 'prs-lib' {
     category?: string;
     projectId?: string | number;
   }
+
+  interface SuperAgentUploadEvent {
+    total: number;
+    uploaded: number;
+    percent: number;
+  }
+
   interface File {
     new(config: PRSConfig): File;
-    signByFileReader(data: FileData, meta: object): Promise<any>;
+    signByFileReader(
+      data: FileData,
+      onUploadProgress?: (event: SuperAgentUploadEvent) => any,
+      onHashProgress?: (percent: number) => any): Promise<any>;
     signByStream(data: FileData, meta: object): Promise<any>;
     signByBuffer(data: FileData, meta: object): Promise<any>;
-    getByRId(rId: string): Promise<any>;
-    getByMsghash(msghash: string): Promise<any>;
-    reward(rId: string, amount: number, comment: string): Promise<any>;
-    getFilesByAddress(address: string, opt: PageOpt): Promise<any>;
+    getByRId(rId: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
+    getByMsghash(msghash: string, options?: { rewardersLimit?: number, withUser?: boolean }): Promise<any>;
+    reward(rId: string, amount: number, options?: { memo?: string, comment?: string, header?: object }): Promise<any>;
+    getFeeds(address: string, options?: { limit?: number, offset?: number, [key: string]: any }): Promise<any>;
   }
 
   interface Block {
     new(config: PRSConfig): Block;
-    getByRIds(rIds: [string], withDetail: boolean): Promise<any>;
+    getByRIds(rIds: [string], options?: { withDetail: boolean }): Promise<any>;
   }
 
   interface DraftContent {
@@ -92,25 +110,25 @@ declare module 'prs-lib' {
     update(id: string, draft: DraftContent): Promise<any>;
     delete(id: string): Promise<any>;
     getById(id: string): Promise<any>;
-    getDrafts(): Promise<any>;
+    getDrafts(options?: PageOpt): Promise<any>;
   }
 
   interface Contract {
     new(config: PRSConfig): Contract;
     getTemplates(type: string): Promise<any>;
     create(code: string): Promise<any>;
-    bind(contractRId: string, fileRId: string, beneficiaryAddress: string):
+    bind(data: { contractRId: string, fileRId: string, beneficiaryAddress: string }):
       Promise<any>;
     getByRId(rId: string): Promise<any>;
-    getContracts(opt: PageOpt): Promise<any>;
+    getContracts(options?: PageOpt): Promise<any>;
   }
 
   interface Order {
     new(config: PRSConfig): Contract;
-    createOrder(contractRId: string, fileRId: string, licenseType: string):
+    createOrder(data: { contractRId: string, fileRId: string, licenseType: string }):
       Promise<any>;
-    getOrdersByContractRId(contractRId: string, opt: PageOpt): Promise<any>;
-    getPurchasedOrders(opt: PageOpt): Promise<any>;
+    getOrdersByContractRId(contractRId: string, options?: PageOpt): Promise<any>;
+    getPurchasedOrders(options?: { offset?: number, limit?: number, type?: string }): Promise<any>;
     getOrderByRId(rId: string): Promise<any>;
   }
 
@@ -127,7 +145,7 @@ declare module 'prs-lib' {
     create(dapp: DappContent): Promise<any>;
     update(address: string, dapp: DappContent): Promise<any>;
     delete(address: string): Promise<any>;
-    getByAddress(address: string): Promise<any>;
+    getByAddress(address: string, options?: { withDeveloper: boolean }): Promise<any>;
     getDApps(): Promise<any>;
     getAuthorizeUrl(appAddress: string): Promise<any>;
     webAuthorize(appAddress: string): Promise<any>;
@@ -135,6 +153,7 @@ declare module 'prs-lib' {
       Promise<any>;
     authenticate(appAddress: string, authAddress: string): Promise<any>;
     deauthenticate(appAddress: string, authAddress: string): Promise<any>;
+    listAuthorized(): Promise<any>;
   }
 
   interface AuthHeader {
