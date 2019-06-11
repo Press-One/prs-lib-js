@@ -74,7 +74,7 @@ describe('Orders', function () {
   it('create order', async function () {
     try {
       const buyerClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
-      const res = await buyerClient.order.createOrder({
+      const res = await buyerClient.order.create({
         contractRId, fileRId, licenseType: 'usage1'
       });
       res.status.should.equal(200);
