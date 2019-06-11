@@ -58,7 +58,7 @@ prs-lib 暴露一个 PRS 类，PRS 主要对 REST API 进行了封装，方便�
   - [getByRId](#contractgetByRId)
   - [bind](#contractbind)
 - [`prs.order`](#prsorder)
-  - [createOrder](#ordercreateOrder)
+  - [create](#ordercreate)
   - [getOrdersByContractRId](#ordergetOrdersByContractRId)
   - [getPurchasedOrders](#ordergetPurchasedOrders)
   - [getOrderByRId](#ordergetOrderByRId)
@@ -628,9 +628,9 @@ interface PageOpt {
 
 封装了订单相关的操作
 
-#### order.createOrder
+#### order.create
 
-> createOrder(contractRId: string, fileRId: string, licenseType: string): Promise
+> create(contractRId: string, fileRId: string, licenseType: string): Promise
 
 - returns: Promise<Response\>
   - Response.body
