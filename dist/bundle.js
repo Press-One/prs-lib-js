@@ -2342,7 +2342,11 @@ var request = function request(_ref2) {
         }
 
         if (onError) {
-          return resolve(onError(err, res));
+          try {
+            return resolve(onError(err, res));
+          } catch (e) {
+            return reject(e);
+          }
         } else {
           return reject(err);
         }
