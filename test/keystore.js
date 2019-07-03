@@ -4,7 +4,10 @@ const assert = require('assert');
 const should = require('chai').should();
 const { user } = require('../fixtures');
 const PRS = require('../lib');
-const client = new PRS({ env: 'env', debug: true });
+
+const prsEnv = process.env.ENV || 'env';
+
+const client = new PRS({ env: prsEnv, debug: true });
 
 describe('Keystore', function () {
   it('get keystore', async function () {
