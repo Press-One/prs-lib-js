@@ -4,8 +4,11 @@ const assert = require('assert');
 const utility = require('prs-utility');
 const { user } = require('../fixtures');
 const PRS = require('../lib');
+
+const prsEnv = process.env.ENV || 'env';
+
 const client = new PRS({
-  env: 'env',
+  env: prsEnv,
   debug: true,
   privateKey: utility.recoverPrivateKey(user.keystore, user.password),
   address: user.address

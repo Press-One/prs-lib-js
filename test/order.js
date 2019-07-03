@@ -8,8 +8,10 @@ const utility = require('prs-utility');
 const { user, buyer } = require('../fixtures');
 const PRS = require('../lib');
 
+const prsEnv = process.env.ENV || 'env';
+
 const client = new PRS({
-  env: 'env',
+  env: prsEnv,
   debug: true,
   privateKey: utility.recoverPrivateKey(user.keystore, user.password),
   address: user.address
@@ -73,7 +75,7 @@ describe('Orders', function () {
 
   it('create order', async function () {
     try {
-      const buyerClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
+      const buyerClient = new PRS({ env: prsEnv, debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
       const res = await buyerClient.order.create({
         contractRId, fileRId, licenseType: 'usage1'
       });
@@ -85,7 +87,7 @@ describe('Orders', function () {
 
   it('get order by rId', async function () {
     try {
-      const buyerClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
+      const buyerClient = new PRS({ env: prsEnv, debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
       const validRId = '84f20b6885f02a2759d5414e360521fc410efa88c408fbcb2572cb9886baed50';
       const res = await buyerClient.order.getOrderByRId(validRId);
       res.status.should.equal(200);
@@ -100,7 +102,7 @@ describe('Orders', function () {
 
   it('get contract orders', async function () {
     try {
-      const buyerClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
+      const buyerClient = new PRS({ env: prsEnv, debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
       const res = await buyerClient.order.getOrdersByContractRId(contractRId, null, { offset: 0, limit: 1 });
       res.status.should.equal(200);
     } catch (err) {
@@ -110,7 +112,7 @@ describe('Orders', function () {
 
   it('get purchased orders', async function () {
     try {
-      const buyerClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
+      const buyerClient = new PRS({ env: prsEnv, debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
       const res = await buyerClient.order.getPurchasedOrders({ offset: 0, limit: 1 });
       res.status.should.equal(200);
     } catch (err) {

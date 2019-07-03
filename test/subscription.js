@@ -5,8 +5,11 @@ const should = require('chai').should();
 const utility = require('prs-utility');
 const { user, developer } = require('../fixtures');
 const PRS = require('../lib');
+
+const prsEnv = process.env.ENV || 'env';
+
 const client = new PRS({
-  env: 'env',
+  env: prsEnv,
   debug: true,
   privateKey: utility.recoverPrivateKey(user.keystore, user.password),
   address: user.address

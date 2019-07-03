@@ -1,10 +1,10 @@
 /* eslint no-undef: 0 */
-
+const prsEnv = process.env.ENV || 'env';
 describe('Should call progress', function () {
   it('signByFileReader', async function () {
     try {
       const prs = new PRS({
-        env: 'env',
+        env: prsEnv,
         debug: true,
         privateKey: '2b8b3ef68fa54d1af878063541e629e62b22764ab58400a3423d778bc0949b9a',
         address: '86248535534919506cc130b21a32383cf36c5b6a'

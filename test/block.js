@@ -3,6 +3,8 @@
 const assert = require('assert');
 const PRS = require('../lib');
 
+const prsEnv = process.env.ENV || 'env';
+
 describe('Block', function () {
   const detailProperties = ['userName', 'userAvatar', 'userTitle', 'title', 'url'];
   const validBlocks = [
@@ -11,7 +13,7 @@ describe('Block', function () {
   ];
   it('get blocks by rIds without details', async function () {
     try {
-      const client = new PRS({ env: 'env', debug: true, onApiSuccess: res => res.body });
+      const client = new PRS({ env: prsEnv, debug: true, onApiSuccess: res => res.body });
       const res = await client.block.getByRIds(validBlocks);
       res.forEach(data => {
         data.should.not.have.keys(detailProperties);
@@ -23,7 +25,7 @@ describe('Block', function () {
 
   it('get blocks by rIds with details', async function () {
     try {
-      const client = new PRS({ env: 'env', debug: true, onApiSuccess: res => res.body });
+      const client = new PRS({ env: prsEnv, debug: true, onApiSuccess: res => res.body });
       const res = await client.block.getByRIds(validBlocks, { withDetail: true });
       res.forEach(data => {
         const keys = Object.keys(data);

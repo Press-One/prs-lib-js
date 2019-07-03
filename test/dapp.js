@@ -5,8 +5,10 @@ const should = require('chai').should();
 const utility = require('prs-utility');
 const PRS = require('../lib');
 const { user, developer } = require('../fixtures');
+const prsEnv = process.env.ENV || 'env';
+console.log(`Test ENV: ${prsEnv}`);
 const client = new PRS({
-  env: 'env',
+  env: prsEnv,
   debug: true,
   privateKey: utility.recoverPrivateKey(developer.keystore, developer.password),
   address: developer.address
@@ -116,7 +118,7 @@ describe('DApp', function () {
 
   it('mock web auth', async function () {
     try {
-      const userClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
+      const userClient = new PRS({ env: prsEnv, debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
       const res = await userClient.dapp.webAuthorize(appAddress);
       code = res.body.code;
       res.status.should.equal(200);
@@ -136,7 +138,7 @@ describe('DApp', function () {
 
   it('authenticate', async function () {
     try {
-      const userClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
+      const userClient = new PRS({ env: prsEnv, debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
       const res = await userClient.dapp.authenticate(appAddress, keyPair.address);
       res.status.should.equal(200);
     } catch (err) {
@@ -146,7 +148,7 @@ describe('DApp', function () {
 
   it('deauthenticate', async function () {
     try {
-      const userClient = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
+      const userClient = new PRS({ env: prsEnv, debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
       const res = await userClient.dapp.deauthenticate(appAddress, keyPair.address);
       res.status.should.equal(200);
     } catch (err) {
@@ -156,7 +158,7 @@ describe('DApp', function () {
 
   it('listAuthorized', async function () {
     try {
-      const prs = new PRS({ env: 'env', debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
+      const prs = new PRS({ env: prsEnv, debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
       const authorizedApps = await prs.dapp.listAuthorized();
       authorizedApps.status.should.equal(200);
       authorizedApps.body.should.have.own.property('list');
