@@ -1,7 +1,7 @@
 {
   "name": "prs-lib",
   "description": "Social Identity / Publish System based on Blockchain.",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "homepage": "https://press.one",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "node": "^10.17.0",
-    "prs-utility": "0.0.6",
+    "prs-utility": "0.0.7",
     "superagent": "^4.1.0"
   },
   "devDependencies": {
