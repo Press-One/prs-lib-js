@@ -5,7 +5,7 @@
 PRS 目前提供了两个环境供开发者使用：
 
 - 正式环境，域名是 https://press.one 。
-- 测试环境，域名是 https://beta.press.one 。
+- 测试环境，域名是 https://dev.press.one 。
 
 目前对 DApp 开放的接口有：
 
@@ -22,8 +22,8 @@ PRS 目前提供了两个环境供开发者使用：
 
 ### 注册账号
 
-1. 开发者前往 PRS 官网注册账号。(正式环境：https://press.one，测试环境：https://beta.press.one )
-2. 登录成功后进入[开发者设置](https://beta.press.one/developer/settings)、[我的 DApp](https://beta.press.one/developer/apps)，完善开发者信息以及创建 DApp。
+1. 开发者前往 PRS 官网注册账号。(正式环境：https://press.one，测试环境：https://dev.press.one )
+2. 登录成功后进入[开发者设置](https://dev.press.one/developer/settings)、[我的 DApp](https://dev.press.one/developer/apps)，完善开发者信息以及创建 DApp。
 3. 在项目中安装此 [Lib](https://github.com/Press-One/prs-lib-js) .
 4. DApp 在合适的时候引导用户进行授权。
 5. 授权成功后即可进行签名发布文件、创建合约等操作。
@@ -59,10 +59,13 @@ const client = new PRS({
 以下代码根据块的 id 从链上对块内容进行获取
 
 ```javascript
-const PRS = require('prs-lib');
+const PRS = require("prs-lib");
 
-const client = new PRS({ env: 'env', debug: true });
-const res = await client.block.getByRIds(['ba03bd584d69b89615ce8db22b4c593342a5ec09b343a7859044a8e4d389c4c2', '65163724a98d29506b1031dc68fa62fb5a7a11fe631fb723a723b2a19e9bb65c'])
+const client = new PRS({ env: "env", debug: true });
+const res = await client.block.getByRIds([
+  "ba03bd584d69b89615ce8db22b4c593342a5ec09b343a7859044a8e4d389c4c2",
+  "65163724a98d29506b1031dc68fa62fb5a7a11fe631fb723a723b2a19e9bb65c"
+]);
 console.log(res.body);
 ```
 
@@ -71,3 +74,4 @@ console.log(res.body);
 prs-lib 暴露一个 PRS 类，开发者通过创建 PRS 实例，来对 REST API 进行交互。
 
 请参考[API.md](API.md)
+

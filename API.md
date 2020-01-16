@@ -7,15 +7,15 @@ prs-lib 暴露一个 PRS 类，PRS 主要对 REST API 进行了封装，方便�
 > const prs = new PRS(options)
 
 - options.env: string, 设置开发环境。正式环境为'prod', 开发环境为'dev'.
-- options.debug: boolean, 开启调试日志，开启后 SDK 会把网络请求、错误消息等信息输出到IDE的日志窗口.
+- options.debug: boolean, 开启调试日志，开启后 SDK 会把网络请求、错误消息等信息输出到 IDE 的日志窗口.
 - options.address: string, 授权用户的 address.
 - options.token: string, 授权用户的 access token.
 - options.privateKey: string, 授权用户的 privateKey.
 - options.host: string, 可选项，指定 api 服务器，多用于调试
-- options.onApiError: (error, response) => any, 可选项，api请求错误的 callback，设置之后，在遇到 api 报错时，不会 reject，而是返回 callback 的处理结果.
-- options.onApiSuccess: (response) => any, 可选项，api请求成功的 callback，设置之后，在遇到 api 成功时，会返回处理后的结果.
+- options.onApiError: (error, response) => any, 可选项，api 请求错误的 callback，设置之后，在遇到 api 报错时，不会 reject，而是返回 callback 的处理结果.
+- options.onApiSuccess: (response) => any, 可选项，api 请求成功的 callback，设置之后，在遇到 api 成功时，会返回处理后的结果.
 
-注：关于 token 和 privateKey，dapp 代表用户时，采用 token（因为拿不到用户的 privateKey）。而用户或是 dapp 代表自己身份时（能拿到 privateKey 时），可以使用 privateKey；区别在于，在签名时，使用 token 的身份会在服务端进行签名，而有 privateKey 的身份可以在本地签名。关于  onApiError 和 onApiSuccess，默认情况下，返回结果是 superagent 的相应结果，api 服务器的结果在 res.body 中，为了避免每次请求完获取 res.body ，可以设置 onApiSuccess：res => res.body。
+注：关于 token 和 privateKey，dapp 代表用户时，采用 token（因为拿不到用户的 privateKey）。而用户或是 dapp 代表自己身份时（能拿到 privateKey 时），可以使用 privateKey；区别在于，在签名时，使用 token 的身份会在服务端进行签名，而有 privateKey 的身份可以在本地签名。关于 onApiError 和 onApiSuccess，默认情况下，返回结果是 superagent 的相应结果，api 服务器的结果在 res.body 中，为了避免每次请求完获取 res.body ，可以设置 onApiSuccess：res => res.body。
 
 初始化完毕后，可以调用以下方法
 
@@ -227,7 +227,7 @@ prs-lib 暴露一个 PRS 类，PRS 主要对 REST API 进行了封装，方便�
   - address: string
 - returns: Promise<Response\>
   - Response.body
-    - deletedAt: string(UTC时间)
+    - deletedAt: string(UTC 时间)
 
 #### dapp.getByAddress
 
@@ -420,7 +420,7 @@ interface FileData {
       - title: string
       - url: string
       - ... 其他属性
-    - _total: number
+    - \_total: number
 
 #### file.reward
 
@@ -577,6 +577,7 @@ interface PageOpt {
 
 - params:
   - code: string
+  - alg: string
 - returns: Promise<Response\>
   - Response.body
     - contract.rId: string
@@ -593,7 +594,7 @@ interface PageOpt {
 
 绑定合约，需要提供合约 id，文件 id，以及受益人的地址。
 
-> bind(contractRId: string, fileRId: string, beneficiaryAddress: string): Promise;
+> bind({contractRId: string, fileRId: string, beneficiaryAddress: string}, alg: string): Promise;
 
 绑定合约会在链上创建一个新块
 
@@ -601,6 +602,7 @@ interface PageOpt {
   - contractRId: 合约 id
   - fileRId: 文件 id
   - beneficiaryAddress: 受益人地址
+  - alg: hash 算法
 - returns: Promise<Response\>
   - Response.body
     - rId: stirng
@@ -788,7 +790,7 @@ getSubscriptionJson(
       - avater: string
       - urk: string
     - items: [SubscrptionData]
-    - _total: number
+    - \_total: number
 
 #### subscription.getSubscribers
 
@@ -870,7 +872,9 @@ getSubscriptionJson(
 > getRecommendationJson(offset: number, limit: number): Promise
 
 - returns: Promise<Response\>
+
   - Response.body
+
     - version: string # json feed 的版本号
     - user_comment: string
     - title: string
@@ -881,6 +885,7 @@ getSubscriptionJson(
       - avater: string
       - urk: string
     - items: [RecommendationJSON]
+
       - RecommendationJSON.id: string
       - RecommendationJSON.title: string
       - RecommendationJSON.url: string
@@ -889,10 +894,10 @@ getSubscriptionJson(
       - RecommendationJSON.content_html: string
       - RecommendationJSON.summary: string
       - RecommendationJSON.date_published: string
-      - RecommendationJSON._sig: string
-      - RecommendationJSON._rId: string
-      - RecommendationJSON._msghash: string
-      - RecommendationJSON._author: object
+      - RecommendationJSON.\_sig: string
+      - RecommendationJSON.\_rId: string
+      - RecommendationJSON.\_msghash: string
+      - RecommendationJSON.\_author: object
         - address: string
         - name: string
         - avatar: string
@@ -903,10 +908,10 @@ getSubscriptionJson(
         - rewardAllowed: number
         - rewardDescription: string
         - recommended: number
-      - RecommendationJSON._recommended_at: string
-      - RecommendationJSON._type: string
+      - RecommendationJSON.\_recommended_at: string
+      - RecommendationJSON.\_type: string
 
-    - _total: number
+    - \_total: number
 
 ### PRS.util
 
@@ -914,7 +919,7 @@ getSubscriptionJson(
 
 #### util.signByToken
 
-dapp 使用经用户授权的 token，对数据进行签名（dapp代表用户身份进行签名）
+dapp 使用经用户授权的 token，对数据进行签名（dapp 代表用户身份进行签名）
 
 > signByToken(data: any, token: string, host: string): Promise
 
