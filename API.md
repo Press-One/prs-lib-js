@@ -573,11 +573,11 @@ interface PageOpt {
 
 创建合约
 
-> create(code: string): Promise
+> create(code: string, hashAlg: string): Promise
 
 - params:
   - code: string
-  - alg: string
+  - hashAlg: string
 - returns: Promise<Response\>
   - Response.body
     - contract.rId: string
@@ -594,7 +594,7 @@ interface PageOpt {
 
 绑定合约，需要提供合约 id，文件 id，以及受益人的地址。
 
-> bind({contractRId: string, fileRId: string, beneficiaryAddress: string}, alg: string): Promise;
+> bind({contractRId: string, fileRId: string, beneficiaryAddress: string}, hashAlg: string): Promise;
 
 绑定合约会在链上创建一个新块
 
@@ -602,7 +602,7 @@ interface PageOpt {
   - contractRId: 合约 id
   - fileRId: 文件 id
   - beneficiaryAddress: 受益人地址
-  - alg: hash 算法
+  - hashAlg: hash 算法
 - returns: Promise<Response\>
   - Response.body
     - rId: stirng
