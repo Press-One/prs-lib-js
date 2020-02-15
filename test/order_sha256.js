@@ -17,6 +17,8 @@ const client = new PRS({
   address: user.address
 });
 
+const SHA256_HASH_ALG = 'sha256';
+
 let contractRId = null;
 let fileRId = null;
 let markdownFileUrl = null;
@@ -41,7 +43,7 @@ describe('Orders', function () {
   Receiver ${user.address}
   License usage1 ${process.env.ENV === 'prod' ? 'PRS' : 'CNB'}:0.001 Terms: 这是个人使用条款，禁止\\n商业应用。
   License usage2 ${process.env.ENV === 'prod' ? 'PRS' : 'CNB'}:0.002 Terms: 这是商业使用条款，允许\\n修改和复制。`;
-      const res = await client.contract.create(code);
+      const res = await client.contract.create(code, SHA256_HASH_ALG);
       contractRId = res.body.contract.rId;
       should.exist(contractRId);
     } catch (err) {
@@ -53,7 +55,7 @@ describe('Orders', function () {
     this.timeout(1000 * 200);
     try {
       const stream = fs.createReadStream(markdownFileUrl);
-      let data = { stream: stream, filename: 'xxx.md', title: 'xxx' };
+      let data = { stream: stream, filename: 'xxx.md', title: 'xxx', hashAlg: SHA256_HASH_ALG };
       const res = await client.file.signByStream(data);
       fileRId = res.body.cache.rId;
       should.exist(fileRId);
@@ -66,7 +68,7 @@ describe('Orders', function () {
     try {
       const res = await client.contract.bind({
         contractRId, fileRId, beneficiaryAddress: user.address
-      });
+      }, SHA256_HASH_ALG);
       res.status.should.equal(200);
     } catch (err) {
       assert.fail(err);
@@ -77,7 +79,7 @@ describe('Orders', function () {
     try {
       const buyerClient = new PRS({ env: prsEnv, debug: true, privateKey: utility.recoverPrivateKey(buyer.keystore, buyer.password), address: buyer.address });
       const res = await buyerClient.order.create({
-        contractRId, fileRId, licenseType: 'usage1'
+        contractRId, fileRId, licenseType: 'usage1', hashAlg: SHA256_HASH_ALG
       });
       res.status.should.equal(200);
     } catch (err) {

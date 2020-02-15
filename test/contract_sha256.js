@@ -50,8 +50,8 @@ describe('Contracts', function () {
   Name 购买授权
   Desc 这是一个\\n测试合约
   Receiver ${user.address}
-  License usage1 CNB:0.001 Terms: 这是个人使用条款，禁止\\n商业应用。
-  License usage2 CNB:0.002 Terms: 这是商业使用条款，允许\\n修改和复制。`;
+  License usage1 ${process.env.ENV === 'prod' ? 'PRS' : 'CNB'}:0.001 Terms: 这是个人使用条款，禁止\\n商业应用。
+  License usage2 ${process.env.ENV === 'prod' ? 'PRS' : 'CNB'}:0.002 Terms: 这是商业使用条款，允许\\n修改和复制。`;
       const res = await client.contract.create(code, SHA256_HASH_ALG);
       contractRId = res.body.contract.rId;
       should.exist(contractRId);

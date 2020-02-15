@@ -45,7 +45,7 @@ describe('Finance', function () {
 
   it('withdraw', async function () {
     try {
-      const res = await client.finance.withdraw(1);
+      const res = await client.finance.withdraw(0.001);
       should.exist(res.body);
     } catch (err) {
       assert.fail(err);
