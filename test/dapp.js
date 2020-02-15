@@ -136,16 +136,6 @@ describe('DApp', function () {
     }
   });
 
-  it('authenticate', async function () {
-    try {
-      const userClient = new PRS({ env: prsEnv, debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
-      const res = await userClient.dapp.authenticate(appAddress, keyPair.address);
-      res.status.should.equal(200);
-    } catch (err) {
-      assert.fail(err);
-    }
-  });
-
   it('deauthenticate', async function () {
     try {
       const userClient = new PRS({ env: prsEnv, debug: true, privateKey: utility.recoverPrivateKey(user.keystore, user.password), address: user.address });
