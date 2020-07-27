@@ -17,6 +17,7 @@
     "build": "node build && uglifyjs ./dist/bundle.js > ./dist/bundle.min.js"
   },
   "dependencies": {
+    "node": "^10.17.0",
     "prs-utility": "0.1.0",
     "superagent": "^4.1.0"
   },
