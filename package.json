@@ -1,7 +1,7 @@
 {
   "name": "prs-lib",
   "description": "Social Identity / Publish System based on Blockchain.",
-  "version": "0.0.18",
+  "version": "0.1.0",
   "homepage": "https://press.one",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
